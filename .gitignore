@@ -1,0 +1,5 @@
+.idea/
+simpleseller.iml
+target/
+ui/node_modules
+ui/public
