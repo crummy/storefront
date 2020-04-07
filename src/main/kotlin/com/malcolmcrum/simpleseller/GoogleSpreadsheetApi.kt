@@ -33,10 +33,5 @@ class GoogleSpreadsheetApi(val apiKey: String) {
         const val MAX_ROWS = 1024
     }
 
-    @Serializable data class Spreadsheet(val sheets: List<Sheet>)
-    @Serializable data class Sheet(val properties: Properties)
-    @Serializable data class Properties(val gridProperties: GridProperties, val title: String)
-    @Serializable data class GridProperties(val rowCount: Long, val columnCount: Long)
-
     @Serializable data class SpreadsheetContent(val values: List<List<JsonElement>>)
 }

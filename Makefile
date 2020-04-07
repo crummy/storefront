@@ -12,3 +12,6 @@ create-dynamodb-tables:
 
 deploy-cloudformation:
 	aws cloudformation deploy --template-file cloudformation.yml --stack-name simpleseller
+
+local:
+	docker-compose -d up
