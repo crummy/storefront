@@ -4,13 +4,14 @@ import io.ktor.application.Application
 import io.ktor.application.call
 import io.ktor.application.install
 import io.ktor.features.*
-import io.ktor.request.receiveText
+import io.ktor.http.HttpMethod
+import io.ktor.request.receive
 import io.ktor.response.respond
-import io.ktor.response.respondText
 import io.ktor.routing.get
 import io.ktor.routing.post
 import io.ktor.routing.routing
 import io.ktor.serialization.json
+import org.slf4j.event.Level
 
 val configuration = Configuration()
 val shopRepository = ShopRepository()
@@ -18,12 +19,20 @@ val spreadsheetApi = GoogleSpreadsheetApi(configuration.googleApiKey)
 
 fun Application.main() {
     install(DefaultHeaders)
-    install(CallLogging)
+    install(CallLogging) {
+        level = Level.INFO
+    }
     install(ContentNegotiation) {
         json()
     }
     install(CORS) { // TODO remove this
         anyHost()
+        method(HttpMethod.Options)
+        header("Sec-Fetch-Dest")
+        header("User-Agent")
+        header("Referer")
+        header("Content-Type")
+        header("Accept")
     }
     routing {
         get("/shop/{id}") {
@@ -33,10 +42,9 @@ fun Application.main() {
             call.respond(shop)
         }
         post("/shop/{id}/checkout") {
-            val json = call.receiveText()
-            println(json)
-            checkout(configuration.stripeApiKey)
-            call.respondText("basketId")
+            val order = call.receive(Order::class)
+            val checkoutId = checkout(order, configuration.stripeApiKey)
+            call.respond(mapOf("id" to checkoutId))
         }
     }
 }
