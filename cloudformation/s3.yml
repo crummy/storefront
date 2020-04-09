@@ -1,44 +1,79 @@
-AWSTemplateFormatVersion: 2010-09-09
+Parameters:
+  RootDomainName:
+    Description: Domain name for your website (example.com)
+    Type: String
+    Default: storefront.nz
+Mappings:
+  RegionMap:
+    us-east-1:
+      S3hostedzoneID: Z3AQBSTGFYJSTF
+      websiteendpoint: s3.website-us-east-1.amazonaws.com
+    us-west-1:
+      S3hostedzoneID: Z2F56UZL2M1ACD
+      websiteendpoint: s3.website-us-west-1.amazonaws.com
+    us-west-2:
+      S3hostedzoneID: Z3BJ6K6RIION7M
+      websiteendpoint: s3.website-us-west-2.amazonaws.com
+    eu-west-1:
+      S3hostedzoneID: Z1BKCTXD74EZPE
+      websiteendpoint: s3.website-eu-west-1.amazonaws.com
+    ap-southeast-1:
+      S3hostedzoneID: Z3O0J2DXBE1FTB
+      websiteendpoint: s3.website-ap-southeast-1.amazonaws.com
+    ap-southeast-2:
+      S3hostedzoneID: Z1WCIGYICN2BYD
+      websiteendpoint: s3.website-ap-southeast-2.amazonaws.com
+    ap-northeast-1:
+      S3hostedzoneID: Z2M4EHUR26P7ZW
+      websiteendpoint: s3.website-ap-northeast-1.amazonaws.com
+    sa-east-1:
+      S3hostedzoneID: Z31GFT0UA1I2HV
+      websiteendpoint: s3.website-sa-east-1.amazonaws.com
 Resources:
-  S3Bucket:
+  RootBucket:
     Type: AWS::S3::Bucket
     Properties:
+      BucketName: !Ref RootDomainName
       AccessControl: PublicRead
       WebsiteConfiguration:
         IndexDocument: index.html
-        ErrorDocument: index.html
-    DeletionPolicy: Retain
-  BucketPolicy:
-    Type: AWS::S3::BucketPolicy
+        ErrorDocument: 404.html
+  WWWBucket:
+    Type: AWS::S3::Bucket
     Properties:
-      PolicyDocument:
-        Id: SimpleSellWebsite
-        Version: 2012-10-17
-        Statement:
-          - Sid: PublicReadForGetBucketObjects
-            Effect: Allow
-            Principal: '*'
-            Action: 's3:GetObject'
-            Resource: !Join
-              - ''
-              - - 'arn:aws:s3:::'
-                - !Ref S3Bucket
-                - /*
-      Bucket: !Ref S3Bucket
+      BucketName: !Sub
+          - www.${Domain}
+          - Domain: !Ref RootDomainName
+      AccessControl: BucketOwnerFullControl
+      WebsiteConfiguration:
+        RedirectAllRequestsTo:
+          HostName: !Ref RootBucket
+  myDNS:
+    Type: AWS::Route53::RecordSetGroup
+    Properties:
+      HostedZoneName: !Sub 
+          - ${Domain}.
+          - Domain: !Ref RootDomainName
+      Comment: Zone apex alias.
+      RecordSets:
+      - 
+        Name: !Ref RootDomainName
+        Type: A
+        AliasTarget:
+          HostedZoneId: !FindInMap [ RegionMap, !Ref 'AWS::Region', S3hostedzoneID]
+          DNSName: !FindInMap [ RegionMap, !Ref 'AWS::Region', websiteendpoint]
+      -
+        Name: !Sub
+            - www.${Domain}
+            - Domain: !Ref RootDomainName
+        Type: CNAME
+        TTL: 900
+        ResourceRecords:
+        - !GetAtt WWWBucket.DomainName
 Outputs:
   WebsiteURL:
-    Value: !GetAtt
-      - S3Bucket
-      - WebsiteURL
+    Value: !GetAtt RootBucket.WebsiteURL
     Description: URL for website hosted on S3
-  S3BucketSecureURL:
-    Value: !Join
-      - ''
-      - - 'https://'
-        - !GetAtt
-          - S3Bucket
-          - DomainName
-    Description: Name of S3 bucket to hold website content
   WebsiteBucketName:
-    Value: !Ref S3Bucket
+    Value: !Ref RootBucket
     Description: Bucket name for website

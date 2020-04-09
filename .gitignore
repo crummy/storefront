@@ -3,3 +3,6 @@ simpleseller.iml
 target/
 ui/node_modules
 ui/public
+node_modules
+dist
+.serverless

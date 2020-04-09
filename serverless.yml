@@ -1,0 +1,77 @@
+service: simple-sell
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: ${opt:stage, 'dev'}
+  region: ap-southeast-2
+
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Action:
+        - 'lambda:InvokeFunction'
+      Resource: "*"
+    - Effect: Allow
+      Action:
+        - "ssm:GetParameter"
+      Resource: "*"
+    - Effect: Allow
+      Action:
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+      Resource:
+        - "Fn::GetAtt": [ shopConfigTable, Arn ]
+
+package:
+  exclude:
+    - "**/*"
+  include:
+    - dist/**
+    - package.json
+    - package-lock.json
+
+functions:
+  getShop:
+    handler: dist/shop.get
+    events:
+      - http:
+          path: shop/{id}
+          method: GET
+
+resources:
+  Resources:
+    shopConfigTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: shop-config-${self:provider.stage}
+        AttributeDefinitions:
+          - AttributeName: "id"
+            AttributeType: "S"
+        KeySchema:
+          - AttributeName: "id"
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 5
+          WriteCapacityUnits: 5
+  Outputs:
+    TableName:
+      Value: !Ref 'shopConfigTable'
+      Description: Shop configuration table
+
+plugins:
+  - serverless-domain-manager
+  - serverless-prune-plugin
+  - serverless-finch
+
+custom:
+  prune:
+    automatic: true
+    number: 3
+    includeLayers: true
+  customDomain:
+    domainName: ${self:provider.stage}.storefront.nz
+    certificateName: "*.storefront.nz"
+    createRoute53Record: true
+    stage: ${self:provider.stage}
+    endpointType: 'regional'

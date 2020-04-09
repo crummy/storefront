@@ -12,6 +12,7 @@
         <kotlin.version>1.3.70</kotlin.version>
         <ktor.version>1.3.2</ktor.version>
         <serialization.version>0.20.0</serialization.version>
+        <osiris.version>1.5.0</osiris.version>
     </properties>
 
     <repositories>
