@@ -1,3 +1,4 @@
+# thanks https://nickolaskraus.org/articles/creating-a-static-website-using-cloudformation/
 AWSTemplateFormatVersion: '2010-09-09'
 
 Description: Storefront UI hosting
@@ -114,3 +115,6 @@ Outputs:
   BucketName:
     Value: !Ref S3BucketRoot
     Description: Bucket name hosting website
+  WebsiteURL:
+    Value: !Join ["", ["https://", !Ref DomainName]]
+    Description: URL for website hosted on S3

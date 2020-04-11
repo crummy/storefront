@@ -3,8 +3,11 @@ import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import livereload from 'rollup-plugin-livereload';
 import { terser } from 'rollup-plugin-terser';
+import replace from '@rollup/plugin-replace';
+import AWS from 'aws-sdk'
 
 const production = !process.env.ROLLUP_WATCH;
+const baseUrl = "https://dev.storefront.nz"
 
 export default {
 	input: 'src/main.js',
@@ -23,6 +26,11 @@ export default {
 			css: css => {
 				css.write('public/build/bundle.css');
 			}
+		}),
+		replace({
+			process: JSON.stringify({
+				env: { baseUrl }
+			})
 		}),
 
 		// If you have external dependencies installed from

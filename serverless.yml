@@ -23,6 +23,9 @@ provider:
       Resource:
         - "Fn::GetAtt": [ shopConfigTable, Arn ]
 
+environment:
+  SHOP_CONFIG_TABLE: !Ref shopConfigTable
+
 package:
   exclude:
     - "**/*"
@@ -38,6 +41,7 @@ functions:
       - http:
           path: shop/{id}
           method: GET
+          cors: true
 
 resources:
   Resources:

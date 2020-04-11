@@ -2,14 +2,15 @@
   import { onMount } from "svelte";
 
   export let params;
-  export let shopId = params.id;
+  export const shopId = params.id;
   export let shop = { title: "Loading...", goods: [] };
   let email = "",
 		address = "",
-		error;
+    error;
+  const baseUrl = process.env.baseUrl
 
   const getShop = async () => {
-    let response = await fetch(`http://localhost:8080/shop/${shopId}`);
+    let response = await fetch(`${baseUrl}/shop/${shopId}`);
     return response.json();
   };
 
@@ -25,7 +26,7 @@
 
   const handleCheckout = async () => {
     const response = await fetch(
-      `http://localhost:8080/shop/${shopId}/checkout`,
+      `${baseUrl}/shop/${shopId}/checkout`,
       {
         method: "POST",
         body: JSON.stringify({ goods: shop.goods }),
