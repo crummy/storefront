@@ -7,7 +7,7 @@
   let email = "",
 		address = "",
     error;
-  const baseUrl = process.env.baseUrl
+  const baseUrl = process.env.apiUrl
 
   const getShop = async () => {
     let response = await fetch(`${baseUrl}/shop/${shopId}`);

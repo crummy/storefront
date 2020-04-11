@@ -23,12 +23,17 @@ provider:
       Resource:
         - "Fn::GetAtt": [ shopConfigTable, Arn ]
 
-environment:
-  SHOP_CONFIG_TABLE: !Ref shopConfigTable
+  environment:
+    SHOP_CONFIG_TABLE: shop-config-${self:provider.stage} # TODO: grab this from where it's declared
+    STRIPE_API_KEY: ${ssm:/api/${self:provider.stage}/stripe-api-key~true}
+    GOOGLE_API_KEY: ${ssm:/api/${self:provider.stage}/google-api-key~true}
 
 package:
   exclude:
-    - "**/*"
+    - ui/**
+    - src/**
+    - cloudformation/**
+    - Makefile
   include:
     - dist/**
     - package.json
@@ -36,7 +41,7 @@ package:
 
 functions:
   getShop:
-    handler: dist/shop.get
+    handler: dist/handler.getShop
     events:
       - http:
           path: shop/{id}
@@ -60,13 +65,13 @@ resources:
           WriteCapacityUnits: 5
   Outputs:
     TableName:
-      Value: !Ref 'shopConfigTable'
+      Value: !Ref shopConfigTable
       Description: Shop configuration table
 
 plugins:
   - serverless-domain-manager
   - serverless-prune-plugin
-  - serverless-finch
+  - serverless-offline
 
 custom:
   prune:

@@ -4,10 +4,9 @@ import commonjs from '@rollup/plugin-commonjs';
 import livereload from 'rollup-plugin-livereload';
 import { terser } from 'rollup-plugin-terser';
 import replace from '@rollup/plugin-replace';
-import AWS from 'aws-sdk'
 
 const production = !process.env.ROLLUP_WATCH;
-const baseUrl = "https://dev.storefront.nz"
+const apiUrl = "https://dev.storefront.nz" // TODO: different one for prod
 
 export default {
 	input: 'src/main.js',
@@ -29,7 +28,9 @@ export default {
 		}),
 		replace({
 			process: JSON.stringify({
-				env: { baseUrl }
+				env: {
+					apiUrl
+				}
 			})
 		}),
 

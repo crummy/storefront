@@ -21,3 +21,19 @@ sync:
 	cd ui && npm run build && cd - && \
 	aws --region us-east-1 s3 cp --recursive --acl "public-read" ./ui/public s3://$(BUCKET)/ && \
 	aws cloudfront create-invalidation --distribution-id $(CLOUDFRONT_ID) --paths "/*"
+
+add-shop:
+	test -n "$(STAGE)"
+	test -n "$(ID)"
+	test -n "$(SPREADSHEET_ID)"
+	aws dynamodb put-item --table-name shop-config-$(STAGE) --item '{"id": {"S": "$(ID)"}, "spreadsheetId": {"S": "$(SPREADSHEET_ID)"}}'
+
+set-stripe-api-key:
+	test -n "$(STAGE)"
+	test -n "$(STRIPE_API_KEY)"
+	aws ssm put-parameter --name /api/dev/stripe-api-$(STAGE) --type SecureString --value $(STRIPE_API_KEY)
+
+set-google-api-key:
+	test -n "$(STAGE)"
+	test -n "$(GOOGLE_API_KEY)"
+	aws ssm put-parameter --name /api/dev/stripe-api-$(STAGE) --type SecureString --value $(GOOGLE_API_KEY)
