@@ -3,7 +3,12 @@
   "scripts": {
     "build": "tsc",
     "deploy": "npm run build && sls deploy",
-    "pretest": "npm run local:dynamodb:start"
+    "pretest": "npm run local:dynamodb:start",
+    "test": "NODE_ENV=test IS_OFFLINE=true jest --runInBand --detectOpenHandles",
+    "posttest": "npm run local:dynamodb:stop",
+    "test:watch": "npm run test -- --watch",
+    "local:dynamodb:start": "./scripts/start-local-dynamodb.sh",
+    "local:dynamodb:stop": "./scripts/stop-local-dynamodb.sh"
   },
   "dependencies": {
     "node-fetch": "^2.6.0",
@@ -12,12 +17,18 @@
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.47",
+    "@types/jest": "^25.2.1",
     "@types/node": "^13.11.0",
     "@types/node-fetch": "^2.5.5",
     "@types/uuid": "^7.0.2",
+    "@types/yaml": "^1.2.0",
     "aws-sdk": "^2.656.0",
+    "jest": "^25.3.0",
     "serverless-domain-manager": "^3.3.1",
     "serverless-offline": "^6.1.4",
-    "serverless-prune-plugin": "^1.4.2"
+    "serverless-prune-plugin": "^1.4.2",
+    "ts-jest": "^25.3.1",
+    "typescript": "^3.8.3",
+    "yaml": "^1.8.3"
   }
 }
