@@ -4,12 +4,12 @@ import { getRows } from "./spreadsheetApi"
 const PRICES = "Prices"
 const FIELDS = "Customization"
 
-interface Shop {
+export interface Shop {
   goods: Array<Good>,
   fields: Record<string, any>
 }
 
-interface Good {
+export interface Good {
   name: string,
   price: number,
   unit: string,

@@ -1,4 +1,5 @@
 import { get } from './shop'
+import { createOrder, OrderedGood } from './checkout'
 import { APIGatewayEvent } from "aws-lambda"
 
 interface Response {
@@ -8,17 +9,31 @@ interface Response {
 }
 
 export const getShop = async (event: APIGatewayEvent): Promise<Response> => {
-  const shopId = event.pathParameters!!['id']!!
   try {
+    const shopId = event.pathParameters!!['id']!!
     const shop = await get(shopId)
     return ok(shop)
   } catch (e) {
+    console.error(e)
+    return error(e.message)
+  }
+}
+
+
+export const checkout = async (event: APIGatewayEvent): Promise<Response> => {
+  try {
+    const shopId = event.pathParameters!!['id']!!
+    const order = JSON.parse(event.body!!) 
+    const shop = await createOrder(shopId, order.email, order.goods as Array<OrderedGood>)
+    return ok(shop)
+  } catch (e) {
+    console.error(e)
     return error(e.message)
   }
 }
 
 const corsHeaders = {
-  'Access-Control-Allow-Origin': '*.storefront.nz',
+  'Access-Control-Allow-Origin': '*', // TODO: be smarter about this
   'Access-Control-Allow-Credentials': true,
 }
 
