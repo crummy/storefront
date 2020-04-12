@@ -1,9 +1,8 @@
-import AWS from 'aws-sdk'
+import { ddb } from './dynamodb'
 import { OrderedGood } from './checkout'
 import uuid from 'uuid'
 
 export const tableName = process.env.ORDER_TABLE!!
-const ddb = new AWS.DynamoDB.DocumentClient()
 
 export interface SavedOrder extends Order {
   id: string

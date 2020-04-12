@@ -1,7 +1,6 @@
-import AWS from 'aws-sdk'
+import { ddb } from './dynamodb'
 
-const tableName = process.env.SHOP_CONFIG_TABLE!!
-const ddb = new AWS.DynamoDB.DocumentClient()
+export const tableName = process.env.SHOP_CONFIG_TABLE!!
 
 export interface ShopConfig {
   id: string,

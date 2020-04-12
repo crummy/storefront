@@ -1,6 +1,7 @@
 import { get } from './shop'
 import { createOrder, OrderedGood } from './checkout'
 import { APIGatewayEvent } from "aws-lambda"
+import { HttpError } from './error'
 
 interface Response {
   statusCode: number,
@@ -8,14 +9,13 @@ interface Response {
   headers: Record<string, any> | undefined
 }
 
-export const getShop = async (event: APIGatewayEvent): Promise<Response> => {
+export const getShop = async ({ pathParameters }: { pathParameters: Record<string, string> }): Promise<Response> => {
   try {
-    const shopId = event.pathParameters!!['id']!!
+    const shopId = pathParameters.id
     const shop = await get(shopId)
     return ok(shop)
   } catch (e) {
-    console.error(e)
-    return error(e.message)
+    return error(e)
   }
 }
 
@@ -27,8 +27,7 @@ export const checkout = async (event: APIGatewayEvent): Promise<Response> => {
     const shop = await createOrder(shopId, order.email, order.goods as Array<OrderedGood>)
     return ok(shop)
   } catch (e) {
-    console.error(e)
-    return error(e.message)
+    return error(e)
   }
 }
 
@@ -46,10 +45,20 @@ const ok = (message: any): Response => {
   }
 }
 
-const error = (reason: string, statusCode: number = 500): Response => {
-  return {
-    statusCode,
-    body: JSON.stringify({ error: reason }),
-    headers: corsHeaders
+const error = (exception: Error): Response => {
+  console.log(exception)
+  if (exception instanceof HttpError) {
+    return {
+      statusCode: exception.statusCode,
+      body: JSON.stringify({ error: exception.message }),
+      headers: corsHeaders
+    }
+  } else {
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: "An unexpected error occurred" }),
+      headers: corsHeaders
+    }
   }
+
 }

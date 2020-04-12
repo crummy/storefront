@@ -1,5 +1,6 @@
 import { get as getShopConfig } from "./shopConfig"
 import { getRows } from "./spreadsheetApi"
+import { HttpError } from "./error"
 
 const PRICES = "Prices"
 const FIELDS = "Customization"
@@ -19,7 +20,7 @@ export interface Good {
 export const get = async (shopId: string): Promise<Shop|null> => {
   const config = await getShopConfig(shopId)
   if (!config) {
-    throw Error(`No shop found with ID ${shopId}`)
+    throw new HttpError(`No shop found with ID ${shopId}`, 404)
   }
 
   const goodsPromise = getRows(config.spreadsheetId, PRICES)
