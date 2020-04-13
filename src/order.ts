@@ -32,7 +32,6 @@ export const get = async (id: string): Promise<SavedOrder | null> => {
         return null
       }
     })
-    .catch(error => { throw Error(error) })
 }
 
 export const put = async (order: Order): Promise<string> => {
@@ -42,6 +41,5 @@ export const put = async (order: Order): Promise<string> => {
     Item: {id, ...order }
   }
   await ddb.put(params).promise()
-    .catch(error => { throw Error(error) })
   return id
 }

@@ -1,13 +1,10 @@
 import { get as getShopConfig } from "./shopConfig"
-import { getRows } from "./spreadsheetApi"
+import { getRows, PRICES, FIELDS } from "./spreadsheetApi"
 import { HttpError } from "./error"
 
-const PRICES = "Prices"
-const FIELDS = "Customization"
-
 export interface Shop {
-  goods: Array<Good>,
-  fields: Record<string, any>
+  goods: Good[],
+  fields: { string: any }
 }
 
 export interface Good {
@@ -17,7 +14,7 @@ export interface Good {
   comment: string
 }
 
-export const get = async (shopId: string): Promise<Shop|null> => {
+export const get = async (shopId: string): Promise<Shop | null> => {
   const config = await getShopConfig(shopId)
   if (!config) {
     throw new HttpError(`No shop found with ID ${shopId}`, 404)
@@ -28,8 +25,7 @@ export const get = async (shopId: string): Promise<Shop|null> => {
   const goods = (await goodsPromise)
     .filter((_, i) => i != 0) // skip first row - it contains headers
     .map(row => toGood(row))
-  const fields = (await fieldsPromise)
-    .map(row => [row[0], row[1] as [string, any]])
+  const fields = Object.fromEntries(await fieldsPromise)
 
   return {
     goods,
@@ -37,11 +33,11 @@ export const get = async (shopId: string): Promise<Shop|null> => {
   }
 }
 
-const toGood = (row: Array<any>): Good =>  {
+const toGood = (row: Array<string | Number>): Good => {
   return {
-    name: row[0],
+    name: String(row[0]),
     price: Number(row[1]),
-    unit: row[2],
-    comment: row[3]
+    unit: String(row[2]),
+    comment: String(row[3])
   }
 }
