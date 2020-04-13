@@ -1,6 +1,6 @@
 import { ddb } from './dynamodb'
 import { OrderedGood } from './checkout'
-import uuid from 'uuid'
+import { v4 as uuidv4 } from 'uuid';
 
 export const tableName = process.env.ORDER_TABLE!!
 
@@ -35,7 +35,7 @@ export const get = async (id: string): Promise<SavedOrder | null> => {
 }
 
 export const put = async (order: Order): Promise<string> => {
-  const id = uuid.v4()
+  const id = uuidv4()
   const params = {
     TableName: tableName, 
     Item: {id, ...order }

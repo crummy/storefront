@@ -35,6 +35,7 @@ package:
     - src/**
     - cloudformation/**
     - Makefile
+    - scripts/**
   include:
     - dist/**
     - package.json
