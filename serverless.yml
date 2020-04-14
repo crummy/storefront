@@ -22,12 +22,14 @@ provider:
         - dynamodb:UpdateItem
       Resource:
         - "Fn::GetAtt": [ shopConfigTable, Arn ]
+        - "Fn::GetAtt": [ orderTable, Arn ]
 
   environment:
     SHOP_CONFIG_TABLE: shop-config-${self:provider.stage} # TODO: grab this from where it's declared
     ORDER_TABLE: order-${self:provider.stage} # TODO: grab this from where it's declared
     STRIPE_API_KEY: ${ssm:/api/${self:provider.stage}/stripe-api-key~true}
     GOOGLE_API_KEY: ${ssm:/api/${self:provider.stage}/google-api-key~true}
+    WEBSITE_BASE_URL: ${cf.us-east-1:simple-sell-ui.WebsiteURL}
 
 package:
   exclude:
@@ -46,7 +48,7 @@ functions:
     handler: dist/handler.getShop
     events:
       - http:
-          path: shop/{id}
+          path: shop/{shopId}
           method: GET
           cors: true
 
@@ -54,7 +56,15 @@ functions:
     handler: dist/handler.checkout
     events:
       - http:
-          path: shop/{id}/checkout
+          path: shop/{shopId}/checkout
+          method: post
+          cors: true
+
+  getOrder:
+    handler: dist/handler.getOrder
+    events:
+      - http:
+          path: shop/{shopId}/order/{orderId}
           method: post
           cors: true
 

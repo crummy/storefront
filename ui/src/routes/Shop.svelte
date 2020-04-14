@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
 
   export let params;
-  export const shopId = params.id;
+  export const shopId = params.shopId;
   export let shop = { title: "Loading...", goods: [] };
   let email = "",
 		address = "",
@@ -37,7 +37,6 @@
       }
 		);
 		const json = await response.json()
-    console.log({ json });
     var stripe = Stripe("pk_test_aXZARMk1T9r3c3JMbUMkoTRW009LogMzaN");
     stripe
       .redirectToCheckout({

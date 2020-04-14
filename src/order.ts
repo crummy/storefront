@@ -4,8 +4,15 @@ import { v4 as uuidv4 } from 'uuid';
 
 export const tableName = process.env.ORDER_TABLE!!
 
+export enum State {
+  PENDING_PAYMENT = "PENDING_PAYMENT",
+  PAID = "PAID",
+  CANCELLED = "CANCELLED"
+}
+
 export interface SavedOrder extends Order {
-  id: string
+  id: string,
+  state: State
 }
 
 export interface Order {
@@ -27,7 +34,7 @@ export const get = async (id: string): Promise<SavedOrder | null> => {
     .then(result => result.Item)
     .then(item => {
       if (item) {
-        return { id: item.id, goods: item.goods, email: item.email, created: item.created, shopId: item.shopId }
+        return { id: item.id, goods: item.goods, email: item.email, created: new Date(item.created), shopId: item.shopId, state: item.state }
       } else {
         return null
       }
@@ -38,8 +45,20 @@ export const put = async (order: Order): Promise<string> => {
   const id = uuidv4()
   const params = {
     TableName: tableName, 
-    Item: {id, ...order }
+    Item: {id, ...order, created: order.created.toISOString() }
   }
   await ddb.put(params).promise()
   return id
+}
+
+export const setState = async (id: string, state: State) => {
+  const params = {
+    TableName: tableName,
+    Key: { id },
+    UpdateExpression: "set state = :state",
+    ExpressionAttributeValues: { 
+      ":state": state
+    }
+  }
+  await ddb.update(params).promise()
 }

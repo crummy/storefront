@@ -7,7 +7,7 @@
 	let params;
 	
   router(
-    "/shop/:id",
+    "/:shopId",
     (ctx, next) => {
       params = ctx.params;
       next();
@@ -16,7 +16,7 @@
 	);
 	
   router(
-    "/shop/:id/orders",
+    "/:shopId/order/:orderId",
     (ctx, next) => {
       params = ctx.params;
       next();

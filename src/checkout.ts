@@ -10,7 +10,12 @@ const baseUrl = process.env.WEBSITE_BASE_URL!!
 
 const stripe = new Stripe(process.env.STRIPE_API_KEY!!, { apiVersion: '2020-03-02' });
 
-export const createOrder = async (shopId: string, email: string, goods: Array<OrderedGood>): Promise<string> => {
+interface CreateOrderResponse {
+  sessionId: string,
+  orderId: string
+}
+
+export const createOrder = async (shopId: string, email: string, goods: Array<OrderedGood>): Promise<CreateOrderResponse> => {
 
   const lineItems = goods.map(good => ({
     name: good.name,
@@ -30,5 +35,8 @@ export const createOrder = async (shopId: string, email: string, goods: Array<Or
     line_items: lineItems,
     success_url: successUrl,
     cancel_url: cancelUrl,
-  }).then(session => session.id)
+  }).then(session => ({
+    sessionId: session.id,
+    orderId
+  }))
 }
