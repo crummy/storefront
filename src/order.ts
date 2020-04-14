@@ -44,8 +44,8 @@ export const get = async (id: string): Promise<SavedOrder | null> => {
 export const put = async (order: Order): Promise<string> => {
   const id = uuidv4()
   const params = {
-    TableName: tableName, 
-    Item: {id, ...order, created: order.created.toISOString() }
+    TableName: tableName,
+    Item: { id, ...order, created: order.created.toISOString() }
   }
   await ddb.put(params).promise()
   return id
@@ -56,9 +56,31 @@ export const setState = async (id: string, state: State) => {
     TableName: tableName,
     Key: { id },
     UpdateExpression: "set state = :state",
-    ExpressionAttributeValues: { 
+    ExpressionAttributeValues: {
       ":state": state
     }
   }
   await ddb.update(params).promise()
 }
+
+export const query = async (shopId: string): Promise<SavedOrder[]> => {
+  const params = {
+    TableName: tableName,
+    IndexName: 'shopId',
+    KeyConditionExpression: "shopId = :shopId",
+    ExpressionAttributeValues: {
+      ":shopId": shopId
+    }
+  }
+  return ddb.query(params).promise()
+    .then(result => result.Items?.map(item => toOrder(item)) || [])
+}
+
+const toOrder = (item: any): SavedOrder => ({
+  id: item.id,
+  goods: item.goods,
+  created: new Date(item.created),
+  shopId: item.shopId,
+  email: item.email,
+  state: item.state
+})

@@ -1,6 +1,6 @@
 import { get as readShop } from './shop'
 import { createOrder, OrderedGood } from './checkout'
-import { get as readOrder } from './order'
+import { get as readOrder, query as readOrders } from './order'
 import { APIGatewayEvent } from "aws-lambda"
 import { HttpError } from './error'
 
@@ -58,6 +58,16 @@ export const cancelOrder = async ({ pathParameters }: Event ): Promise<Response>
       throw new HttpError(`No order found for orderId ${orderId}`, 404)
     }
     return ok(order)
+  } catch (e) {
+    return error(e)
+  }
+}
+
+export const getOrders = async ({ pathParameters }: Event): Promise<Response> => {
+  try {
+    const { shopId } = pathParameters
+    const orders = await readOrders(shopId)
+    return ok(orders)
   } catch (e) {
     return error(e)
   }

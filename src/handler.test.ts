@@ -1,7 +1,7 @@
 import { tableName as orderTable } from './order'
 import { tableName as shopConfigTable, ShopConfig } from './shopConfig'
 import { resetTable } from './testUtil'
-import { getShop, checkout, getOrder } from './handler'
+import { getShop, checkout, getOrder, getOrders } from './handler'
 import { ddb } from './dynamodb'
 import { getRows, PRICES, FIELDS } from './spreadsheetApi'
 import { mocked } from 'ts-jest/utils'
@@ -77,6 +77,11 @@ describe('getShop', () => {
 })
 
 describe('checkout', () => {
+  beforeEach(async () => {
+    await resetTable('orderTable', orderTable)
+    await resetTable('shopConfigTable', shopConfigTable)
+  })
+
   test('read order after creation', async () => {
     const checkoutResponse = await checkout(
       {
@@ -97,14 +102,23 @@ describe('checkout', () => {
   })
 })
 
+describe('getOrders', () => {
+  beforeEach(async () => {
+    await resetTable('orderTable', orderTable)
+    await resetTable('shopConfigTable', shopConfigTable)
+  })
+
+  test('no orders', async () => {
+    const response = await getOrders({ pathParameters: { shopId: 'shop' }, body: null})
+    expect(response.statusCode).toEqual(200)
+    expect(JSON.parse(response.body)).toEqual([])
+
+  })
+})
+
 const createShopConfig = async (config: ShopConfig) => {
   await ddb.put({
     TableName: shopConfigTable,
     Item: config
   }).promise()
-  const result = await ddb.scan(
-    {
-      TableName: shopConfigTable,
-    }
-  ).promise()
 }

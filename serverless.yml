@@ -90,12 +90,27 @@ resources:
         AttributeDefinitions:
           - AttributeName: "id"
             AttributeType: "S"
+          - AttributeName: "shopId"
+            AttributeType: "S"
         KeySchema:
           - AttributeName: "id"
             KeyType: HASH
         ProvisionedThroughput:
           ReadCapacityUnits: 5
           WriteCapacityUnits: 5
+        GlobalSecondaryIndexes:
+          - IndexName: shopId
+            KeySchema:
+              - AttributeName: shopId
+                KeyType: HASH
+              - AttributeName: id
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+            ProvisionedThroughput:
+              ReadCapacityUnits: 5
+              WriteCapacityUnits: 5
+              
 
   Outputs:
     TableName:
