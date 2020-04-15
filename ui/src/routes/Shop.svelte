@@ -31,6 +31,16 @@
   };
 </script>
 
+<style>
+  table {
+    width: 100%
+  }
+
+  .quantityInput {
+    width: 6em;
+  }
+</style>
+
 <svelte:options accessors={true} />
 <main>
   <script src="https://js.stripe.com/v3/">
@@ -49,7 +59,7 @@
           <td>{good.name}</td>
           <td>${good.price}/{good.unit}</td>
           <td>
-            <input type="number" bind:value={good.quantity} />
+            <input type="number" class="quantityInput" bind:value={good.quantity} />
           </td>
         </tr>
       {/each}
@@ -62,7 +72,7 @@
     <fieldset>
       <div class="pure-control-group">
         <label for="email">Email:</label>
-        <input id="email" type="email" bind:value={email} />
+        <input id="email" type="email" bind:value={email} required/>
       </div>
     </fieldset>
     <button type="submit" class="pure-button">Checkout</button>
