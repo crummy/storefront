@@ -15,8 +15,7 @@
   const handleCheckout = async () => {
     const order = {
       goods: shop.goods.filter(good => good.quantity > 0),
-      email,
-      total
+      email
     }
     const response = await checkout(shopId, order);
     const json = await response.json();

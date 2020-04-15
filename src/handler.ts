@@ -1,7 +1,6 @@
 import { get as readShop } from './shop'
 import { createOrder, OrderedGood } from './checkout'
 import { get as readOrder, query as readOrders, State } from './order'
-import { APIGatewayEvent } from "aws-lambda"
 import { HttpError } from './error'
 
 interface Response {
