@@ -79,8 +79,8 @@ functions:
     handler: dist/handler.stripeWebhook
     events:
       - http:
-        path: shop/{shopId}/order/webhook
-        method: post
+          path: shop/{shopId}/order/webhook
+          method: post
 
 resources:
   Resources:
