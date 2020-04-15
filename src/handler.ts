@@ -1,6 +1,6 @@
 import { get as readShop } from './shop'
 import { createOrder, OrderedGood } from './checkout'
-import { get as readOrder, query as readOrders, State } from './order'
+import { get as readOrder, query as readOrders, State, setState } from './order'
 import { HttpError } from './error'
 
 interface Response {
@@ -49,7 +49,7 @@ export const getOrder = async ({ pathParameters, body }: Event): Promise<Respons
   }
 }
 
-export const cancelOrder = async ({ pathParameters }: Event ): Promise<Response> => {
+export const cancelOrder = async ({ pathParameters }: Event): Promise<Response> => {
   try {
     const { shopId, orderId } = pathParameters
     const order = await readOrder(orderId)
@@ -59,7 +59,8 @@ export const cancelOrder = async ({ pathParameters }: Event ): Promise<Response>
       console.log(`Attempted to cancel order ${orderId} but it is in state ${order.state}`)
       throw new HttpError(`Order ${orderId} cannot be cancelled`, 409)
     }
-    return ok({message: `Order ${orderId} cancelled`})
+    await setState(orderId, State.CANCELLED)
+    return ok({ message: `Order ${orderId} cancelled` })
   } catch (e) {
     return error(e)
   }
@@ -77,7 +78,9 @@ export const getOrders = async ({ pathParameters }: Event): Promise<Response> =>
 
 export const stripeWebhook = async ({ pathParameters, body }: Event): Promise<Response> => {
   try {
-    console.log(body)
+    const content = JSON.parse(body!)
+    const orderId = content.data.object.client_reference_id
+    await setState(orderId, State.PAID)
     return ok()
   } catch (e) {
     return error(e)

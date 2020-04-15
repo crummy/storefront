@@ -29,6 +29,7 @@ export const get = async (id: string): Promise<SavedOrder | null> => {
       id
     }
   }
+  console.log(`reading order`, params)
   return ddb.get(params)
     .promise()
     .then(result => result.Item)
@@ -55,7 +56,10 @@ export const setState = async (id: string, state: State) => {
   const params = {
     TableName: tableName,
     Key: { id },
-    UpdateExpression: "set state = :state",
+    UpdateExpression: "set #state = :state",
+    ExpressionAttributeNames: {
+      "#state": "state"
+    },
     ExpressionAttributeValues: {
       ":state": state
     }
