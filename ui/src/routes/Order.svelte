@@ -1,5 +1,6 @@
 <script>
   import { onMount } from "svelte";
+    import Header from '../components/Header.svelte'
 
   const messages = {
     PENDING_PAYMENT:
@@ -24,7 +25,7 @@
 </style>
 
 <main>
-  <h1>{shop.title}</h1>
+  <Header params={params} />
   {#if message}
     <h2>{message}</h2>
   {/if}

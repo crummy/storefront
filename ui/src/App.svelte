@@ -47,14 +47,6 @@
     margin: 0 auto;
   }
 
-  :global(h1) {
-    color: #ff3e00;
-    text-transform: uppercase;
-    font-size: 4em !important;
-    font-weight: 100;
-    text-align: center;
-  }
-
   :global(h2) {
     background-color: #ffc4b0;
     padding: 1em;

@@ -1,6 +1,7 @@
 <script>
   import { onMount } from "svelte";
   import { cancel, getShop } from "../api";
+  import Header from '../components/Header.svelte'
 
   export let params;
   export const shopId = params.shopId;
@@ -17,7 +18,7 @@
 
 {#if shop}
 <main>
-  <h1>{shop.title}</h1>
-  <h2>Order cancelled</h2>
+  <Header params={params} />
+  <h2>Order cancelled.</h2>
 </main>
 {/if}

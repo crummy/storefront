@@ -1,6 +1,6 @@
 <script>
-  import { onMount } from "svelte";
   import { checkout } from "../api";
+  import Header from "../components/Header.svelte"
 
   export let params;
   export const shopId = params.shopId;
@@ -45,7 +45,7 @@
   <script src="https://js.stripe.com/v3/">
 
   </script>
-  <h1>{shop.title}</h1>
+  <Header params={params} />
   {#if shop.message}
     <h2>{shop.message}</h2>
   {/if}
