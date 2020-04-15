@@ -76,8 +76,9 @@ export const getOrders = async ({ pathParameters }: Event): Promise<Response> =>
   }
 }
 
-export const stripeWebhook = async ({ pathParameters, body }: Event): Promise<Response> => {
+export const stripeWebhook = async ({ body }: Event): Promise<Response> => {
   try {
+    console.log(body)
     const content = JSON.parse(body!)
     const orderId = content.data.object.client_reference_id
     await setState(orderId, State.PAID)

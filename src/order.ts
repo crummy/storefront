@@ -29,7 +29,6 @@ export const get = async (id: string): Promise<SavedOrder | null> => {
       id
     }
   }
-  console.log(`reading order`, params)
   return ddb.get(params)
     .promise()
     .then(result => result.Item)

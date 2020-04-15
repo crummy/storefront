@@ -98,7 +98,6 @@ describe('checkout', () => {
         })
       })
     const orderId = JSON.parse(checkoutResponse.body).orderId
-    console.log(`checkout response`, checkoutResponse.body)
     const response = await getOrder({ pathParameters: { shopId: shopConfig.id, orderId }, body: null })
     expect(response.statusCode).toEqual(200)
     expect(JSON.parse(response.body)).toEqual(

@@ -30,3 +30,7 @@ set-google-api-key:
 	test -n "$(STAGE)"
 	test -n "$(GOOGLE_API_KEY)"
 	aws ssm put-parameter --name /api/$(STAGE)/google-api-key --type SecureString --value $(GOOGLE_API_KEY)
+
+deploy:
+	npm run build
+	serverless deploy

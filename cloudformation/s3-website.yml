@@ -49,9 +49,9 @@ Resources:
           - !Ref DomainName
           - !Sub 'www.${DomainName}'
         CustomErrorResponses:
-          - ErrorCachingMinTTL: 60
+          - ErrorCachingMinTTL: 300
             ErrorCode: 404
-            ResponseCode: 404
+            ResponseCode: 200
             ResponsePagePath: '/index.html'
         DefaultCacheBehavior:
           AllowedMethods:

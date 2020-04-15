@@ -41,6 +41,7 @@ export const createOrder = async (shopId: string, email: string, goods: OrderedG
     line_items: lineItems,
     success_url: successUrl,
     cancel_url: cancelUrl,
+    client_reference_id: orderId
   }).then(session => ({
     sessionId: session.id,
     orderId,
