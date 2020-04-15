@@ -1,10 +1,11 @@
 <script>
   import { onMount } from "svelte";
-  import { getShop, checkout } from "../api";
+  import { checkout } from "../api";
 
   export let params;
+  console.log(params)
   export const shopId = params.shopId;
-  export let shop = { title: "Loading...", goods: [] };
+  export let shop = params.shop;
   let email = "",
     error;
 
@@ -12,14 +13,13 @@
     .map(good => good.price * (good.quantity ? good.quantity : 0))
     .reduce((a, b) => a + b, 0);
 
-  onMount(async () => {
-    getShop(shopId).then(
-      result => (shop = { goods: result.goods, ...result.fields })
-    );
-  });
-
   const handleCheckout = async () => {
-    const response = await checkout(shopId, shop.goods);
+    const order = {
+      goods: shop.goods.filter(good => good.quantity > 0),
+      email,
+      total
+    }
+    const response = await checkout(shopId, order);
     const json = await response.json();
     var stripe = Stripe("pk_test_aXZARMk1T9r3c3JMbUMkoTRW009LogMzaN");
     stripe

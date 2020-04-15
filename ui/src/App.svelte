@@ -4,42 +4,40 @@
   import Order from "./routes/Order.svelte";
   import Welcome from "./routes/Welcome.svelte";
   import Cancel from "./routes/Cancel.svelte";
+  import { getShop } from "./api";
+  import { parseQuery } from "./queryString"
 
   let page;
-  let params;
+  let params = {}
+
+  const loadShop = (ctx, next) => {
+    params.shopId = ctx.params.shopId
+    getShop(params.shopId).then(result => {
+      params.shop = { goods: result.goods, ...result.fields }
+      next();
+    });
+  };
+
+  const loadOrder = (ctx, next) => {
+    params.orderId = ctx.params.orderId
+    getOrder(params.shopId, params.orderId).then(order => {
+      params.order = order
+      next();
+    });
+  };
+
+  const loadQueryString = (ctx, next) => {
+    const queryParams = parseQuery(ctx.querystring)
+    params = { ...params, queryParams }
+    next()
+  }
 
   router("/", () => (page = Welcome));
+  router("/:shopId/*", loadShop);
+  router("/:shopId", loadShop, () => (page = Shop));
+  router("/:shopId/order/:orderId", loadQueryString, () => (page = Order));
+  router("/:shopId/order/:orderId/cancel", () => (page = Cancel));
 
-  router(
-    "/:shopId",
-    (ctx, next) => {
-      params = ctx.params;
-      next();
-    },
-    () => (page = Shop)
-  );
-
-  router(
-    "/:shopId/order/:orderId",
-    (ctx, next) => {
-      params = ctx.params;
-      next();
-    },
-    () => {
-      page = Order;
-    }
-  );
-
-  router(
-    "/:shopId/order/:orderId/cancel",
-    (ctx, next) => {
-      params = ctx.params;
-      next();
-    },
-    () => {
-      page = Cancel;
-    }
-  );
   router.start();
 </script>
 
