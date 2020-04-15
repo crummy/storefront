@@ -17,11 +17,11 @@
     .reduce((a, b) => a + b, 0);
 </script>
 
-<script>
+<style>
   table {
     width: 100%
   }
-</script>
+</style>
 
 <main>
   <h1>{shop.title}</h1>
