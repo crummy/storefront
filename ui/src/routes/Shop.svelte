@@ -20,7 +20,7 @@
     }
     const response = await checkout(shopId, order);
     const json = await response.json();
-    var stripe = Stripe(response.stripeKey);
+    var stripe = Stripe(json.stripeKey);
     stripe
       .redirectToCheckout({
         sessionId: json.sessionId

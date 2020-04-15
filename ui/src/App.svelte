@@ -4,7 +4,7 @@
   import Order from "./routes/Order.svelte";
   import Welcome from "./routes/Welcome.svelte";
   import Cancel from "./routes/Cancel.svelte";
-  import { getShop } from "./api";
+  import { getShop, getOrder } from "./api";
   import { parseQuery } from "./queryString"
 
   let page;
@@ -35,8 +35,8 @@
   router("/", () => (page = Welcome));
   router("/:shopId/*", loadShop);
   router("/:shopId", loadShop, () => (page = Shop));
-  router("/:shopId/order/:orderId", loadQueryString, () => (page = Order));
-  router("/:shopId/order/:orderId/cancel", () => (page = Cancel));
+  router("/:shopId/order/:orderId", loadOrder, loadQueryString, () => (page = Order));
+  router("/:shopId/order/:orderId/cancel", loadOrder, () => (page = Cancel));
 
   router.start();
 </script>

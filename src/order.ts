@@ -45,7 +45,7 @@ export const put = async (order: Order): Promise<string> => {
   const id = uuidv4()
   const params = {
     TableName: tableName,
-    Item: { id, ...order, created: order.created.toISOString() }
+    Item: { id, state: State.PENDING_PAYMENT, ...order, created: order.created.toISOString() }
   }
   await ddb.put(params).promise()
   return id
