@@ -1,80 +1,38 @@
 <script>
   import { onMount } from "svelte";
+  import { getShop, checkout } from "../api";
 
   export let params;
   export const shopId = params.shopId;
   export let shop = { title: "Loading...", goods: [] };
   let email = "",
-		address = "",
     error;
-  const baseUrl = process.env.apiUrl
-
-  const getShop = async () => {
-    let response = await fetch(`${baseUrl}/shop/${shopId}`);
-    return response.json();
-  };
 
   $: total = shop.goods
     .map(good => good.price * (good.quantity ? good.quantity : 0))
     .reduce((a, b) => a + b, 0);
 
   onMount(async () => {
-    getShop().then(
+    getShop(shopId).then(
       result => (shop = { goods: result.goods, ...result.fields })
     );
   });
 
   const handleCheckout = async () => {
-    const response = await fetch(
-      `${baseUrl}/shop/${shopId}/checkout`,
-      {
-        method: "POST",
-        body: JSON.stringify({ goods: shop.goods }),
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json"
-        }
-      }
-		);
-		const json = await response.json()
+    const response = await checkout(shopId, shop.goods);
+    const json = await response.json();
     var stripe = Stripe("pk_test_aXZARMk1T9r3c3JMbUMkoTRW009LogMzaN");
     stripe
       .redirectToCheckout({
-        sessionId: json.id
+        sessionId: json.sessionId
       })
       .then(function(result) {
-        error = result.error.message
+        error = result.error.message;
       });
   };
 </script>
 
-<style>
-  main {
-    max-width: 800px;
-    margin: 0 auto;
-  }
-
-  h1 {
-    color: #ff3e00;
-    text-transform: uppercase;
-    font-size: 4em;
-    font-weight: 100;
-    text-align: center;
-  }
-
-  h2 {
-    background-color: #ffc4b0;
-    padding: 1em;
-    text-align: center;
-  }
-</style>
-
 <svelte:options accessors={true} />
-<link
-  rel="stylesheet"
-  href="https://unpkg.com/purecss@1.0.1/build/pure-min.css"
-  integrity="sha384-oAOxQR6DkCoMliIh8yFnu25d7Eq/PHS21PClpwjOTeU2jRSq11vu66rf90/cZr47"
-  crossorigin="anonymous" />
 <main>
   <script src="https://js.stripe.com/v3/">
 
@@ -103,10 +61,6 @@
       </tr>
     </table>
     <fieldset>
-      <div class="pure-control-group">
-        <label for="address">Address:</label>
-        <textarea id="address" bind:value={address} />
-      </div>
       <div class="pure-control-group">
         <label for="email">Email:</label>
         <input id="email" type="email" bind:value={email} />

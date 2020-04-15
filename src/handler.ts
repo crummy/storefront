@@ -1,6 +1,6 @@
 import { get as readShop } from './shop'
 import { createOrder, OrderedGood } from './checkout'
-import { get as readOrder, query as readOrders } from './order'
+import { get as readOrder, query as readOrders, State } from './order'
 import { APIGatewayEvent } from "aws-lambda"
 import { HttpError } from './error'
 
@@ -56,8 +56,11 @@ export const cancelOrder = async ({ pathParameters }: Event ): Promise<Response>
     const order = await readOrder(orderId)
     if (order == null || order.shopId !== shopId) {
       throw new HttpError(`No order found for orderId ${orderId}`, 404)
+    } else if (order.state != State.PENDING_PAYMENT) {
+      console.log(`Attempted to cancel order ${orderId} but it is in state ${order.state}`)
+      throw new HttpError(`Order ${orderId} cannot be cancelled`, 409)
     }
-    return ok(order)
+    return ok({message: `Order ${orderId} cancelled`})
   } catch (e) {
     return error(e)
   }

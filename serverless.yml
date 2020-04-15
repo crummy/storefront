@@ -65,6 +65,14 @@ functions:
     events:
       - http:
           path: shop/{shopId}/order/{orderId}
+          method: get
+          cors: true
+
+  cancelOrder:
+    handler: dist/handler.cancelOrder
+    events:
+      - http:
+          path: shop/{shopId}/order/{orderId}/cancel
           method: post
           cors: true
 

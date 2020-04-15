@@ -26,14 +26,11 @@ add-shop:
 	test -n "$(STAGE)"
 	test -n "$(ID)"
 	test -n "$(SPREADSHEET_ID)"
-	aws dynamodb put-item --table-name shop-config-$(STAGE) --item '{"id": {"S": "$(ID)"}, "spreadsheetId": {"S": "$(SPREADSHEET_ID)"}}'
-
-set-stripe-api-key:
-	test -n "$(STAGE)"
-	test -n "$(STRIPE_API_KEY)"
-	aws ssm put-parameter --name /api/dev/stripe-api-$(STAGE) --type SecureString --value $(STRIPE_API_KEY)
+	test -n "$(STRIPE_PUBLIC_KEY)"
+	test -n "$(STRIPE_SECRET_KEY)"
+	aws dynamodb put-item --table-name shop-config-$(STAGE) --item '{"id": {"S": "$(ID)"}, "spreadsheetId": {"S": "$(SPREADSHEET_ID)", "stripeKey": "$(STRIPE_PUBLIC_KEY)", "stripeSecretKey": "$(STRIPE_SECRET_KEY)"}}'
 
 set-google-api-key:
 	test -n "$(STAGE)"
 	test -n "$(GOOGLE_API_KEY)"
-	aws ssm put-parameter --name /api/dev/stripe-api-$(STAGE) --type SecureString --value $(GOOGLE_API_KEY)
+	aws ssm put-parameter --name /api/$(STAGE)/google-api-key --type SecureString --value $(GOOGLE_API_KEY)

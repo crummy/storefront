@@ -1,10 +1,13 @@
 <script>
   import router from "page";
   import Shop from "./routes/Shop.svelte";
-  import Orders from "./routes/Orders.svelte";
+  import Order from "./routes/Order.svelte";
+  import Welcome from "./routes/Welcome.svelte";
 
   let page;
-	let params;
+  let params;
+  
+  router("/", () => (page = Welcome))
 	
   router(
     "/:shopId",
@@ -22,13 +25,37 @@
       next();
     },
     () => {
-      if (!user) {
-        router.redirect(`/login`);
-      }
-      page = Orders;
+      page = Order;
     }
   );
   router.start();
 </script>
 
 <svelte:component this={page} {params} />
+
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/purecss@1.0.1/build/pure-min.css"
+  integrity="sha384-oAOxQR6DkCoMliIh8yFnu25d7Eq/PHS21PClpwjOTeU2jRSq11vu66rf90/cZr47"
+  crossorigin="anonymous" />
+
+<style>
+  :global(main) {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  :global(h1) {
+    color: #ff3e00;
+    text-transform: uppercase;
+    font-size: 4em !important;
+    font-weight: 100;
+    text-align: center;
+  }
+
+  :global(h2) {
+    background-color: #ffc4b0;
+    padding: 1em;
+    text-align: center;
+  }
+</style>
