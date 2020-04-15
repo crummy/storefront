@@ -3,12 +3,13 @@
   import Shop from "./routes/Shop.svelte";
   import Order from "./routes/Order.svelte";
   import Welcome from "./routes/Welcome.svelte";
+  import Cancel from "./routes/Cancel.svelte";
 
   let page;
   let params;
-  
-  router("/", () => (page = Welcome))
-	
+
+  router("/", () => (page = Welcome));
+
   router(
     "/:shopId",
     (ctx, next) => {
@@ -16,8 +17,8 @@
       next();
     },
     () => (page = Shop)
-	);
-	
+  );
+
   router(
     "/:shopId/order/:orderId",
     (ctx, next) => {
@@ -28,16 +29,19 @@
       page = Order;
     }
   );
+
+  router(
+    "/:shopId/order/:orderId/cancel",
+    (ctx, next) => {
+      params = ctx.params;
+      next();
+    },
+    () => {
+      page = Cancel;
+    }
+  );
   router.start();
 </script>
-
-<svelte:component this={page} {params} />
-
-<link
-  rel="stylesheet"
-  href="https://unpkg.com/purecss@1.0.1/build/pure-min.css"
-  integrity="sha384-oAOxQR6DkCoMliIh8yFnu25d7Eq/PHS21PClpwjOTeU2jRSq11vu66rf90/cZr47"
-  crossorigin="anonymous" />
 
 <style>
   :global(main) {
@@ -59,3 +63,11 @@
     text-align: center;
   }
 </style>
+
+<svelte:component this={page} {params} />
+
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/purecss@1.0.1/build/pure-min.css"
+  integrity="sha384-oAOxQR6DkCoMliIh8yFnu25d7Eq/PHS21PClpwjOTeU2jRSq11vu66rf90/cZr47"
+  crossorigin="anonymous" />
