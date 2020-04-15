@@ -4,7 +4,9 @@ export const tableName = process.env.SHOP_CONFIG_TABLE!!
 
 export interface ShopConfig {
   id: string,
-  spreadsheetId: string
+  spreadsheetId: string,
+  stripeKey: string,
+  stripeSecretKey: string
 }
 
 export const get = async (id: string): Promise<ShopConfig | null> => {
@@ -19,10 +21,9 @@ export const get = async (id: string): Promise<ShopConfig | null> => {
     .then(result => result.Item)
     .then(item => {
       if (item) {
-        return { id: item.id, spreadsheetId: item.spreadsheetId }
+        return item as ShopConfig
       } else {
         return null
       }
     })
-    .catch(error => { throw Error(error) })
 }

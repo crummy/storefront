@@ -3,9 +3,8 @@
   import { checkout } from "../api";
 
   export let params;
-  console.log(params)
   export const shopId = params.shopId;
-  export let shop = params.shop;
+  export const shop = params.shop;
   let email = "",
     error;
 
@@ -21,7 +20,7 @@
     }
     const response = await checkout(shopId, order);
     const json = await response.json();
-    var stripe = Stripe("pk_test_aXZARMk1T9r3c3JMbUMkoTRW009LogMzaN");
+    var stripe = Stripe(response.stripeKey);
     stripe
       .redirectToCheckout({
         sessionId: json.sessionId

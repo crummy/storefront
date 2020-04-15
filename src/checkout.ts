@@ -1,6 +1,8 @@
 import { Good } from './shop'
 import Stripe from 'stripe';
 import { put as putOrder } from './order'
+import { get as getShopConfig } from './shopConfig'
+import { HttpError } from './error'
 
 export interface OrderedGood extends Good {
   quantity: number
@@ -8,14 +10,18 @@ export interface OrderedGood extends Good {
 
 const baseUrl = process.env.WEBSITE_BASE_URL!!
 
-const stripe = new Stripe(process.env.STRIPE_API_KEY!!, { apiVersion: '2020-03-02' });
-
 interface CreateOrderResponse {
   sessionId: string,
   orderId: string
 }
 
 export const createOrder = async (shopId: string, email: string, goods: Array<OrderedGood>): Promise<CreateOrderResponse> => {
+  const shopConfig = await getShopConfig(shopId)
+  if (!shopConfig) {
+    throw new HttpError(`No shop found: ${shopId}`, 404)
+  }
+
+  const stripe = new Stripe(shopConfig.stripeSecretKey, { apiVersion: '2020-03-02' });
 
   const lineItems = goods.map(good => ({
     name: good.name,
@@ -37,6 +43,7 @@ export const createOrder = async (shopId: string, email: string, goods: Array<Or
     cancel_url: cancelUrl,
   }).then(session => ({
     sessionId: session.id,
-    orderId
+    orderId,
+    stripeKey: shopConfig.stripeKey,
   }))
 }
