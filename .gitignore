@@ -6,3 +6,4 @@ ui/public
 node_modules
 dist
 .serverless
+.DS_Store
