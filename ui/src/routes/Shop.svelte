@@ -45,7 +45,7 @@
   <script src="https://js.stripe.com/v3/">
 
   </script>
-  <Header params={params} />
+  <Header shop={shop} />
   {#if shop.message}
     <h2>{shop.message}</h2>
   {/if}

@@ -74,7 +74,8 @@ describe('getShop', () => {
             { name: "Apples", price: 5, unit: "kg", comment: "" },
             { name: "Oranges", price: 200, unit: "g", comment: "" }
           ],
-          fields: { Name: "Test" }
+          fields: { Name: "Test" },
+          id: shopConfig.id
         })
       })
     )

@@ -1,8 +1,5 @@
 <script>
-  export let params;
-  const shopId = params.shopId;
-  const orderId = params.orderId;
-  const shop = params.shop  
+  export let shop;
 </script>
 
 <style>
@@ -21,5 +18,5 @@
 </style>
 
 <h1>
-  <a href="/{shopId}">{shop.title}</a>
+  <a href="/{shop.id}">{shop.title}</a>
 </h1>

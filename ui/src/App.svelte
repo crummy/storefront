@@ -13,7 +13,7 @@
   const loadShop = (ctx, next) => {
     params.shopId = ctx.params.shopId
     getShop(params.shopId).then(result => {
-      params.shop = { goods: result.goods, ...result.fields }
+      params.shop = { goods: result.goods, id: result.id, ...result.fields }
       next();
     });
   };

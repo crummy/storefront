@@ -4,7 +4,8 @@ import { HttpError } from "./error"
 
 export interface Shop {
   goods: Good[],
-  fields: { string: any }
+  fields: { string: any },
+  id: string
 }
 
 export interface Good {
@@ -29,7 +30,8 @@ export const get = async (shopId: string): Promise<Shop | null> => {
 
   return {
     goods,
-    fields
+    fields,
+    id: shopId
   }
 }
 

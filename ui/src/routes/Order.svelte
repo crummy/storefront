@@ -25,7 +25,7 @@
 </style>
 
 <main>
-  <Header params={params} />
+  <Header shop={shop} />
   {#if message}
     <h2>{message}</h2>
   {/if}
