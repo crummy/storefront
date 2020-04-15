@@ -75,12 +75,21 @@ export const getOrders = async ({ pathParameters }: Event): Promise<Response> =>
   }
 }
 
+export const stripeWebhook = async ({ pathParameters, body }: Event): Promise<Response> => {
+  try {
+    console.log(body)
+    return ok()
+  } catch (e) {
+    return error(e)
+  }
+}
+
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*', // TODO: be smarter about this
   'Access-Control-Allow-Credentials': true,
 }
 
-const ok = (message: any): Response => {
+const ok = (message: any = {}): Response => {
   return {
     statusCode: 200,
     body: JSON.stringify(message),

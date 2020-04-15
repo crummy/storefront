@@ -75,6 +75,13 @@ functions:
           method: post
           cors: true
 
+  stripeWebhook:
+    handler: dist/handler.stripeWebhook
+    events:
+      - http:
+        path: shop/{shopId}/order/webhook
+        method: post
+
 resources:
   Resources:
     shopConfigTable:
