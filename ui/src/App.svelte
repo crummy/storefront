@@ -14,6 +14,7 @@
     params.shopId = ctx.params.shopId
     getShop(params.shopId).then(result => {
       params.shop = { goods: result.goods, id: result.id, ...result.fields }
+      document.title = result.fields.title
       next();
     });
   };
@@ -54,6 +55,9 @@
   }
 </style>
 
+<svelte:head>
+	<title>storefront.nz</title>
+</svelte:head>
 <svelte:component this={page} {params} />
 
 <link
