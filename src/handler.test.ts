@@ -3,9 +3,9 @@ import { tableName as shopConfigTable, ShopConfig } from './shopConfig'
 import { resetTable } from './testUtil'
 import { getShop, checkout, getOrder, getOrders, stripeWebhook } from './handler'
 import { ddb } from './dynamodb'
-import { getRows, PRICES, FIELDS } from './spreadsheetApi'
+import { getShopRows, PRICES, FIELDS } from './spreadsheetApi'
 import { mocked } from 'ts-jest/utils'
-import Stripe from 'stripe';
+import fs from 'fs'
 
 jest.mock('./spreadsheetApi')
 jest.mock('stripe', () => {
@@ -43,7 +43,10 @@ describe('getShop', () => {
 
   test('shop exists, empty spreadsheet', async () => {
     await createShopConfig(shopConfig)
-    mocked(getRows).mockImplementation(() => Promise.resolve([]))
+    mocked(getShopRows).mockImplementation(() => {
+      const contents = fs.readFileSync('src/test/emptySpreadsheet.json')
+      return JSON.parse(contents.toString())
+    })
     const response = await getShop({ pathParameters: { shopId: shopConfig.id }, body: null })
     expect(response).toEqual(
       expect.objectContaining({
@@ -54,31 +57,25 @@ describe('getShop', () => {
 
   test('shop exists', async () => {
     await createShopConfig(shopConfig)
-    mocked(getRows).mockImplementation((spreadsheetId, table) => {
-      expect(spreadsheetId).toEqual(shopConfig.spreadsheetId)
-      if (table == PRICES) {
-        return Promise.resolve([["skip this row"], ["Apples", 5, "kg", ""], ["Oranges", 200, "g", ""]])
-      } else if (table == FIELDS) {
-        return Promise.resolve([["Name", "Test"]])
-      } else {
-        throw new Error(`Unexpected table ${table}`)
-      }
+    mocked(getShopRows).mockImplementation(() => {
+      const contents = fs.readFileSync('src/test/spreadsheet.json')
+      return JSON.parse(contents.toString())
     })
 
     const response = await getShop({ pathParameters: { shopId: shopConfig.id }, body: null })
-    expect(response).toEqual(
-      expect.objectContaining({
-        statusCode: 200,
-        body: JSON.stringify({
-          goods: [
-            { name: "Apples", price: 5, unit: "kg", comment: "" },
-            { name: "Oranges", price: 200, unit: "g", comment: "" }
-          ],
-          fields: { Name: "Test" },
-          id: shopConfig.id
-        })
-      })
+    expect(response.statusCode).toEqual(200)
+    const body = JSON.parse(response.body)
+    expect(body).toEqual(
+      expect.objectContaining(
+        {
+          "id": "shop",
+          "goods": [{ "name": "Omega plums", "price": 6, "unit": "kg", "comment": "undefined" }, { "name": "Angelino plums", "price": 6, "unit": "kg", "comment": "undefined" }, { "name": "Plum seconds", "price": 4, "unit": "kg", "comment": "undefined" }, { "name": "Feijoas", "price": 4, "unit": "kg", "comment": "undefined" }, { "name": "Feijoa smalls", "price": 3, "unit": "kg", "comment": "egg sized" }, { "name": "Liberty apples", "price": 4, "unit": "kg", "comment": "from Heavens' Scent orchard" }],
+          "fields": { "title": "Windsong Orchard", "message": "Feijoa season! Short and Sweet", "footer": "Biogro #130 certified organic produce", "shipping_north_island": 25, "shipping_south_island": 15, "shipping_rural": 5.5, "shipping_kg_unit": "14 or less" },
+          "shippingCosts": [{ "name": "North Island", "price": 25, "perKg": 14 }, { "name": "North Island Rural Delivery", "price": 29.5, "perKg": 14 }, { "name": "South Island", "price": 15, "perKg": 14 }, { "name": "South Island Rural Delivery", "price": 19.5, "perKg": 14 }, { "name": "Pickup", "price": 0, "perKg": 14 }]
+        }
+      )
     )
+
   })
 })
 
@@ -143,7 +140,7 @@ describe('stripeWebhook', () => {
       pathParameters: {},
       body: JSON.stringify({ data: { object: { client_reference_id: orderId } } })
     })
-    const orderResponse = await getOrder({ pathParameters: { shopId: shopConfig.id, orderId }, body: null})
+    const orderResponse = await getOrder({ pathParameters: { shopId: shopConfig.id, orderId }, body: null })
     const order = JSON.parse(orderResponse.body)
     expect(order.state).toEqual(State.PAID)
   })

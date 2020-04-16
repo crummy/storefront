@@ -1,6 +1,7 @@
 <script>
   import { onMount } from "svelte";
-    import Header from '../components/Header.svelte'
+  import Header from "../components/Header.svelte";
+  import Footer from "../components/Footer.svelte";
 
   const messages = {
     PENDING_PAYMENT:
@@ -20,12 +21,12 @@
 
 <style>
   table {
-    width: 100%
+    width: 100%;
   }
 </style>
 
 <main>
-  <Header shop={shop} />
+  <Header {shop} />
   {#if message}
     <h2>{message}</h2>
   {/if}
@@ -33,7 +34,10 @@
     {#each order.goods as good}
       <tr>
         <td>{good.name}</td>
-        <td>{good.quantity} {good.unit}{#if good.quantity != 1}s{/if}</td>
+        <td>
+          {good.quantity} {good.unit}
+          {#if good.quantity != 1}s{/if}
+        </td>
         <td>${good.price * good.quantity}</td>
       </tr>
     {/each}
@@ -43,4 +47,7 @@
       <th>${total}</th>
     </tr>
   </table>
+  {#if shop.footer}
+    <Footer message={shop.footer} />
+  {/if}
 </main>

@@ -1,6 +1,7 @@
 <script>
   import { checkout } from "../api";
   import Header from "../components/Header.svelte"
+  import Footer from "../components/Footer.svelte"
 
   export let params;
   export const shopId = params.shopId;
@@ -76,4 +77,7 @@
     </fieldset>
     <button type="submit" class="pure-button">Checkout</button>
   </form>
+  {#if shop.footer}
+    <Footer message={shop.footer} />
+  {/if}
 </main>
