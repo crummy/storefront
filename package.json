@@ -9,7 +9,7 @@
     "test:watch": "npm run test -- --watch",
     "local:dynamodb:start": "./scripts/start-local-dynamodb.sh",
     "local:dynamodb:stop": "./scripts/stop-local-dynamodb.sh",
-    "local": "serverless offline start"
+    "local": "npm run build && serverless offline start"
   },
   "dependencies": {
     "node-fetch": "^2.6.0",

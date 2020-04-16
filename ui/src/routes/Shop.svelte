@@ -63,6 +63,11 @@
           </td>
         </tr>
       {/each}
+      {#if shop.shippingCosts}
+        <tr>
+        {shop.shippingCosts}
+        </tr>
+      {/if}
       <tr>
         <th>Total</th>
         <th />

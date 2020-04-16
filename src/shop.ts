@@ -29,7 +29,7 @@ export const get = async (shopId: string): Promise<Shop | null> => {
   }
 
   // thank god for typescript
-  const spreadsheet = await getShopRows(shopId)
+  const spreadsheet = await getShopRows(config.spreadsheetId)
   const goods = spreadsheet.valueRanges
     .find(valueRange => valueRange.range.startsWith(PRICES))
     ?.values
