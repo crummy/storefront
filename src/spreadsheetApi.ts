@@ -4,8 +4,6 @@ const baseUrl = "https://sheets.googleapis.com/v4/spreadsheets"
 const maxRows = 1024
 const apiKey = process.env.GOOGLE_API_KEY
 
-// https://sheets.googleapis.com/v4/spreadsheets/***REMOVED***/values:batchGet\?ranges\=Prices!A1:Z26\&ranges\=Customization!A1:Z26\&ranges\=Shipping!A1:Z26\&key\=***REMOVED***\&valueRenderOption=UNFORMATTED_VALUE
-
 export interface Spreadsheet {
   spreadsheetId: string,
   valueRanges: ValueRange[]
