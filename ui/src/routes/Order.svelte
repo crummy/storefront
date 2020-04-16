@@ -26,7 +26,7 @@
 </style>
 
 <main>
-  <Header shopId={shop.id}, title={shop.title}, subtitle={shop.subtitle} />
+  <Header {shop} />
   {#if message}
     <h2>{message}</h2>
   {/if}
