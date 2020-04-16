@@ -1,0 +1,119 @@
+{
+  "spreadsheetId": "19X-_-oAmAeV0keoNb_XMBDkYWwt_CW4RSHTTSL8Wx8o",
+  "valueRanges": [
+    {
+      "range": "Prices!A1:D26",
+      "majorDimension": "ROWS",
+      "values": [
+        [
+          "Item",
+          "Price",
+          "Unit",
+          "Comment"
+        ],
+        [
+          "Omega plums",
+          6,
+          "kg"
+        ],
+        [
+          "Angelino plums",
+          6,
+          "kg"
+        ],
+        [
+          "Plum seconds",
+          4,
+          "kg"
+        ],
+        [
+          "Feijoas",
+          4,
+          "kg"
+        ],
+        [
+          "Feijoa smalls",
+          3,
+          "kg",
+          "egg sized"
+        ],
+        [
+          "Liberty apples",
+          4,
+          "kg",
+          "from Heavens' Scent orchard"
+        ]
+      ]
+    },
+    {
+      "range": "Customization!A1:B26",
+      "majorDimension": "ROWS",
+      "values": [
+        [
+          "title",
+          "Windsong Orchard"
+        ],
+        [
+          "message",
+          "Feijoa season! Short and Sweet"
+        ],
+        [
+          "footer",
+          "Biogro #130 certified organic produce"
+        ],
+        [
+          "shipping_north_island",
+          25
+        ],
+        [
+          "shipping_south_island",
+          15
+        ],
+        [
+          "shipping_rural",
+          5.5
+        ],
+        [
+          "shipping_kg_unit",
+          "14 or less"
+        ]
+      ]
+    },
+    {
+      "range": "Shipping!A1:Z26",
+      "majorDimension": "ROWS",
+      "values": [
+        [
+          "Destination",
+          "Price",
+          "Per kg"
+        ],
+        [
+          "North Island",
+          25,
+          14
+        ],
+        [
+          "North Island Rural Delivery",
+          29.5,
+          14
+        ],
+        [
+          "South Island",
+          15,
+          14
+        ],
+        [
+          "South Island Rural Delivery",
+          19.5,
+          14
+        ],
+        [
+          "Pickup",
+          0,
+          14
+        ]
+      ]
+    }
+  ]
+}

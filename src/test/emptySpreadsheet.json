@@ -1,0 +1,17 @@
+{
+  "spreadsheetId": "19X-_-oAmAeV0keoNb_XMBDkYWwt_CW4RSHTTSL8Wx8o",
+  "valueRanges": [
+    {
+      "range": "Prices!A26:D99",
+      "majorDimension": "ROWS"
+    },
+    {
+      "range": "Customization!A26:B199",
+      "majorDimension": "ROWS"
+    },
+    {
+      "range": "Shipping!A26:Z99",
+      "majorDimension": "ROWS"
+    }
+  ]
+}
