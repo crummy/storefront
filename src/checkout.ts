@@ -41,7 +41,10 @@ export const createOrder = async (shopId: string, email: string, goods: OrderedG
     line_items: lineItems,
     success_url: successUrl,
     cancel_url: cancelUrl,
-    client_reference_id: orderId
+    client_reference_id: orderId,
+    shipping_address_collection: {
+      allowed_countries: ['NZ'],
+    },
   }).then(session => ({
     sessionId: session.id,
     orderId,
