@@ -14,12 +14,13 @@ export interface Spreadsheet {
 interface ValueRange {
   range: string,
   majorDimension: string,
-  values?: Array<Array<string | Number>>
+  values: Array<Array<string | Number>>
 }
 
 export const getShopRows = async (id: string): Promise<Spreadsheet> => {
-  return fetch(`${baseUrl}/${id}/values:batchGet?ranges=${PRICES}!A1:Z${maxRows}&ranges=${FIELDS}!A1:Z${maxRows}&ranges=${SHIPPING}!A1:Z${maxRows}&valueRenderOption=UNFORMATTED_VALUE&key=${apiKey}`)
-    .then(response => response.json())  
+  const url = `${baseUrl}/${id}/values:batchGet?ranges=${PRICES}!A1:Z${maxRows}&ranges=${FIELDS}!A1:Z${maxRows}&ranges=${SHIPPING}!A1:Z${maxRows}&valueRenderOption=UNFORMATTED_VALUE&key=${apiKey}`
+  return fetch(url)
+    .then(response => response.json())
 }
 
 export const PRICES = "Prices"
