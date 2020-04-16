@@ -1,5 +1,5 @@
 <script>
-  export let shop;
+  export let shopId, title, subtitle;
 </script>
 
 <style>
@@ -11,6 +11,12 @@
     text-align: center;
   }
 
+  h2 {
+    text-align: center;
+    font-size: 1.5em;
+    font-weight: normal;
+  }
+
   a, a:visited, a:hover {
     color: #ff3e00;
     text-decoration: none;
@@ -18,5 +24,8 @@
 </style>
 
 <h1>
-  <a href="/{shop.id}">{shop.title}</a>
+  <a href="/{shopId}">{title}</a>
 </h1>
+{#if subtitle}
+  <h2>{subtitle}</h2>
+{/if}

@@ -6,6 +6,7 @@
   export let params;
   export const shopId = params.shopId;
   export const shop = params.shop;
+  console.log(shop)
   let email = "",
     error;
 
@@ -41,14 +42,14 @@
   }
 </style>
 
-<svelte:options accessors={true} />
+<svelte:options   accessors={true} />
 <main>
   <script src="https://js.stripe.com/v3/">
 
   </script>
-  <Header shop={shop} />
+  <Header shopId={shop.id}, title={shop.title}, subtitle={shop.subtitle} />
   {#if shop.message}
-    <h2>{shop.message}</h2>
+    <div class="message">{shop.message}</div>
   {/if}
   <form
     class="pure-form pure-form-aligned"

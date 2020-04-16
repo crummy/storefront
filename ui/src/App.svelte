@@ -13,7 +13,7 @@
   const loadShop = (ctx, next) => {
     params.shopId = ctx.params.shopId
     getShop(params.shopId).then(result => {
-      params.shop = { goods: result.goods, id: result.id, ...result.fields }
+      params.shop = { goods: result.goods, shippingCosts: result.shippingCosts, id: result.id, ...result.fields }
       document.title = result.fields.title
       next();
     });
@@ -48,7 +48,7 @@
     margin: 0 auto;
   }
 
-  :global(h2) {
+  :global(.message) {
     background-color: #ffc4b0;
     padding: 1em;
     text-align: center;
