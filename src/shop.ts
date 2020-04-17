@@ -13,7 +13,7 @@ export interface Good {
   name: string,
   price: number,
   unit: string,
-  comment: string
+  comment?: string
 }
 
 export interface ShippingCosts {
@@ -58,7 +58,7 @@ const toGood = (row: Array<string | Number>): Good => {
     name: String(row[0]),
     price: Number(row[1]),
     unit: String(row[2]),
-    comment: String(row[3])
+    comment: row[3] ? String(row[3]) : undefined
   }
 }
 

@@ -53,16 +53,33 @@
 </script>
 
 <style>
-  table {
-    width: 100%;
-  }
-
   .quantityInput {
     width: 6em;
   }
 
   .error {
     background-color: red;
+  }
+
+  .menu {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 10px;
+    align-items: center;
+  }
+
+  .title {
+    font-weight: bold;
+  }
+
+  .comment {
+    font-size: 0.9em;
+  }
+
+  .header {
+    color: gray;
+    font-weight: bold;
+    font-size: 0.8em;
   }
 </style>
 
@@ -81,52 +98,55 @@
   <form
     class="pure-form pure-form-aligned"
     on:submit|preventDefault={handleCheckout}>
-    <table class="pure-table pure-table-bordered">
+    <div class="menu">
+      <div class="header">Item</div>
+      <div class="header">Quantity</div>
+      <div class="header">Price</div>
       {#each shop.goods as good}
-        <tr>
-          <td>{good.name}</td>
-          <td>${good.price}/{good.unit}</td>
-          <td>
-            <input
-              type="number"
-              class="quantityInput"
-              bind:value={good.quantity} />
-          </td>
-        </tr>
+        <div class="item">
+          <div class="title">{good.name}</div>
+          {#if good.comment}
+            <div class="comment">{good.comment}</div>
+          {/if}
+        </div>
+        <div>${good.price}/{good.unit}</div>
+        <div>
+          <input
+            type="number"
+            class="quantityInput"
+            bind:value={good.quantity} />
+        </div>
       {/each}
       {#if shop.shippingCosts}
-        <tr>
-          <td>Shipping</td>
-          <td>
-            {#each shop.shippingCosts as shippingOption}
-              <label for={shippingOption.name} class="pure-radio">
-                <input
-                  id={shippingOption.name}
-                  type="radio"
-                  name="shippingRadio"
-                  value={shippingOption.name}
-                  bind:group={selectedShippingOption} />
-                {shippingOption.name}
-              </label>
-            {/each}
-          </td>
-          <td>
-            {#if shippingTotal}${shippingTotal}{/if}
-          </td>
-        </tr>
+        <div>Shipping</div>
+        <div>
+          {#each shop.shippingCosts as shippingOption}
+            <label for={shippingOption.name} class="pure-radio">
+              <input
+                id={shippingOption.name}
+                type="radio"
+                name="shippingRadio"
+                value={shippingOption.name}
+                bind:group={selectedShippingOption} />
+              {shippingOption.name}
+            </label>
+          {/each}
+        </div>
+        <div>
+          {#if shippingTotal}${shippingTotal}{/if}
+        </div>
       {/if}
-      <tr>
-        <th>Total</th>
-        <th />
-        <th>${total}</th>
-      </tr>
-    </table>
-    <fieldset>
-      <div class="pure-control-group">
-        <label for="email">Email:</label>
-        <input id="email" type="email" bind:value={email} required />
+      <div class="totalLabel">Total</div>
+      <div class="total">${total}</div>
+      <div>
+          <fieldset>
+          <div class="pure-control-group">
+            <label for="email">Email:</label>
+            <input id="email" type="email" bind:value={email} required />
+          </div>
+        </fieldset>
       </div>
-    </fieldset>
+    </div>
     <button type="submit" class="pure-button" id="checkoutButton">
       Checkout
     </button>

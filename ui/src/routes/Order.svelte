@@ -20,9 +20,7 @@
 </script>
 
 <style>
-  table {
-    width: 100%;
-  }
+
 </style>
 
 <main>
@@ -30,23 +28,27 @@
   {#if message}
     <h2>{message}</h2>
   {/if}
-  <table class="pure-table pure-table-bordered">
+  <div class="menu">
+    <div class="row header">
+      <span>Item</span>
+      <span>Quantity</span>
+      <span>Price</span>
+    </div>
     {#each order.goods as good}
-      <tr>
-        <td>{good.name}</td>
-        <td>
+      <div class="row">
+        <span>{good.name}</span>
+        <span>
           {good.quantity} {good.unit}
           {#if good.quantity != 1}s{/if}
-        </td>
-        <td>${good.price * good.quantity}</td>
-      </tr>
+        </span>
+        <span>${good.price * good.quantity}</span>
+      </div>
     {/each}
-    <tr>
-      <th>Total</th>
-      <th />
-      <th>${total}</th>
-    </tr>
-  </table>
+    <div class="row footer">
+      <span>Total</span>
+      <span>${total}</span>
+    </div>
+  </div>
   {#if shop.footer}
     <Footer message={shop.footer} />
   {/if}
