@@ -71,7 +71,7 @@
   <script src="https://js.stripe.com/v3/">
 
   </script>
-  <Header shopId="{shop.id}," title="{shop.title}" subtitle={shop.subtitle} />
+  <Header shopId={shop.id} title={shop.title} subtitle={shop.subtitle} />
   {#if shop.message && !error}
     <div class="message">{shop.message}</div>
   {/if}
@@ -111,9 +111,7 @@
             {/each}
           </td>
           <td>
-            {#if shippingTotal}
-              ${shippingTotal}
-            {/if}
+            {#if shippingTotal}${shippingTotal}{/if}
           </td>
         </tr>
       {/if}
