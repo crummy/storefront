@@ -14,7 +14,7 @@
 
 {#if shop}
 <main>
-  <Header shopId={shop.id}, title={shop.title}, subtitle={shop.subtitle} />
+  <Header shopId={shop.id}, title={shop.title} subtitle={shop.subtitle} />
   <h2>Order cancelled.</h2>
 </main>
 {/if}

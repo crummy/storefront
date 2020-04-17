@@ -36,7 +36,8 @@
     document.querySelector("#checkoutButton").classList.add("disabled");
     const order = {
       goods: shop.goods.filter(good => good.quantity > 0),
-      email
+      email,
+      shipping: selectedShippingOption
     };
     const response = await checkout(shopId, order);
     const json = await response.json();
@@ -70,7 +71,7 @@
   <script src="https://js.stripe.com/v3/">
 
   </script>
-  <Header shopId="{shop.id}," title="{shop.title}," subtitle={shop.subtitle} />
+  <Header shopId="{shop.id}," title="{shop.title}" subtitle={shop.subtitle} />
   {#if shop.message && !error}
     <div class="message">{shop.message}</div>
   {/if}

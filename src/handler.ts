@@ -29,7 +29,7 @@ export const checkout = async ({ pathParameters, body }: Event): Promise<Respons
   try {
     const { shopId } = pathParameters
     const order = JSON.parse(body!!)
-    const result = await createOrder(shopId, order.email, order.goods as Array<OrderedGood>)
+    const result = await createOrder(shopId, order.email, order.goods, order.shipping)
     return ok(result)
   } catch (e) {
     return error(e)
