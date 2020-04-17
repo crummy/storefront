@@ -6,7 +6,7 @@ import { HttpError } from './error'
 interface Response {
   statusCode: number,
   body: string,
-  headers: Record<string, any> | undefined
+  headers?: Record<string, any>
 }
 
 interface Event {
@@ -24,11 +24,13 @@ export const getShop = async ({ pathParameters }: Event): Promise<Response> => {
   }
 }
 
-
 export const checkout = async ({ pathParameters, body }: Event): Promise<Response> => {
   try {
     const { shopId } = pathParameters
-    const order = JSON.parse(body!!)
+    const order = JSON.parse(body!)
+    if (order.goods.length == 0) {
+      throw new HttpError(`Cannot create an order with no goods`, 409)
+    }
     const result = await createOrder(shopId, order.email, order.goods, order.shipping)
     return ok(result)
   } catch (e) {

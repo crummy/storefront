@@ -77,8 +77,8 @@ const calculateShipping = (shop: Shop, goods: OrderedGood[], selectedOption: str
   if (!shipping) {
     throw new HttpError(`Could not calculate shipping for ${selectedOption}`, 409)
   }
-  const kilosToShip = goods.map(good => (good.quantity ? good.quantity : 0))
+  const kilosToShip = goods.map(good => good.quantity)
     .reduce((a, b) => a + b, 0);
-  const boxesToShip = kilosToShip / shipping.kgPerBox + 0.5;
+  const boxesToShip = Math.round(kilosToShip / shipping.kgPerBox + 0.5);
   return boxesToShip * shipping.pricePerBox;
 }
