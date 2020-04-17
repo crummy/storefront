@@ -110,7 +110,7 @@
               </label>
             {/each}
           </td>
-          <td>{shippingTotal}</td>
+          <td>${shippingTotal}</td>
         </tr>
       {/if}
       <tr>

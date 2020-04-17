@@ -36,7 +36,7 @@ export const createOrder = async (shopId: string, email: string, goods: OrderedG
   }))
   const shippingLineItem = {
     name: `Shipping: ${shipping}`,
-    amount: shippingCost * 100,
+    amount: Math.round(shippingCost * 100),
     currency: 'nzd',
     quantity: 1
   }

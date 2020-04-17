@@ -15,7 +15,7 @@ interface ValueRange {
   values: Array<Array<string | Number>>
 }
 
-export const getShopRows = async (id: string): Promise<Spreadsheet> => {
+export const getShopRows = (id: string): Promise<Spreadsheet> => {
   const url = `${baseUrl}/${id}/values:batchGet?ranges=${PRICES}!A1:Z${maxRows}&ranges=${FIELDS}!A1:Z${maxRows}&ranges=${SHIPPING}!A1:Z${maxRows}&valueRenderOption=UNFORMATTED_VALUE&key=${apiKey}`
   return fetch(url)
     .then(response => response.json())
