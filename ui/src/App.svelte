@@ -52,6 +52,8 @@
     background-color: #ffc4b0;
     padding: 1em;
     text-align: center;
+    margin-bottom: 1em;
+    font-size: 2em;
   }
 </style>
 

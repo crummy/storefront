@@ -6,26 +6,26 @@
   export let params;
   export const shopId = params.shopId;
   export const shop = params.shop;
-  console.log(shop);
   let email = "",
     error;
   let selectedShippingOption,
     shippingTotal = "";
 
-  $: total = shop.goods
+  $: subtotal = shop.goods
     .map(good => good.price * (good.quantity ? good.quantity : 0))
     .reduce((a, b) => a + b, 0);
 
+  $: total = subtotal + shippingTotal;
+
   $: {
-    if (selectedShippingOption && total != 0) {
-      const shipping = shop.shippingCosts.find(
-        option => option.name == selectedShippingOption
-      );
+    if (selectedShippingOption) {
       const kilosToShip = shop.goods
         .map(good => (good.quantity ? good.quantity : 0))
         .reduce((a, b) => a + b, 0);
-      const boxesToShip = Math.round(kilosToShip / shipping.kgPerBox + 0.5);
-      shippingTotal = boxesToShip * shipping.pricePerBox;
+      const boxesToShip = Math.round(
+        kilosToShip / selectedShippingOption.kgPerBox + 0.5
+      );
+      shippingTotal = boxesToShip * selectedShippingOption.pricePerBox;
     }
   }
 
@@ -63,8 +63,7 @@
 
   .menu {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-gap: 10px;
+    grid-template-columns: 80% 20%;
     align-items: center;
   }
 
@@ -80,6 +79,28 @@
     color: gray;
     font-weight: bold;
     font-size: 0.8em;
+    border-bottom: 1px solid lightgray;
+  }
+
+  .subTotalLabel,
+  .totalLabel,
+  .shippingTotalLabel {
+    padding-left: 50%;
+  }
+
+  .totalLabel,
+  .total {
+    font-weight: bold;
+  }
+
+  .item {
+    vertical-align: center;
+    font-size: 1.2em;
+    height: 3em;
+  }
+
+  .quantity {
+    text-align: right;
   }
 </style>
 
@@ -100,16 +121,14 @@
     on:submit|preventDefault={handleCheckout}>
     <div class="menu">
       <div class="header">Item</div>
-      <div class="header">Quantity</div>
-      <div class="header">Price</div>
+      <div class="header quantity">Quantity</div>
       {#each shop.goods as good}
         <div class="item">
-          <div class="title">{good.name}</div>
+          <span class="title">{good.name}</span>, ${good.price}/{good.unit}
           {#if good.comment}
             <div class="comment">{good.comment}</div>
           {/if}
         </div>
-        <div>${good.price}/{good.unit}</div>
         <div>
           <input
             type="number"
@@ -118,28 +137,27 @@
         </div>
       {/each}
       {#if shop.shippingCosts}
-        <div>Shipping</div>
-        <div>
-          {#each shop.shippingCosts as shippingOption}
-            <label for={shippingOption.name} class="pure-radio">
-              <input
-                id={shippingOption.name}
-                type="radio"
-                name="shippingRadio"
-                value={shippingOption.name}
-                bind:group={selectedShippingOption} />
-              {shippingOption.name}
-            </label>
-          {/each}
+        <div class="subTotalLabel">Subtotal</div>
+        <div class="subTotal">${subtotal}</div>
+
+        <div class="shippingTotalLabel">
+          Delivery to:
+          <select id="shippingOption" bind:value={selectedShippingOption}>
+            {#each shop.shippingCosts as shippingOption}
+              <option value={shippingOption}>{shippingOption.name}</option>
+            {/each}
+          </select>
         </div>
-        <div>
+        <div class="shippingTotal">
           {#if shippingTotal}${shippingTotal}{/if}
         </div>
       {/if}
+
       <div class="totalLabel">Total</div>
       <div class="total">${total}</div>
+
       <div>
-          <fieldset>
+        <fieldset>
           <div class="pure-control-group">
             <label for="email">Email:</label>
             <input id="email" type="email" bind:value={email} required />

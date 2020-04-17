@@ -9,11 +9,12 @@
     font-size: 4em !important;
     font-weight: 100;
     text-align: center;
+    margin-bottom: 0;
   }
 
   h2 {
     text-align: center;
-    font-size: 1.5em;
+    font-size: 1.2em;
     font-weight: normal;
   }
 
