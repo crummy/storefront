@@ -65,7 +65,7 @@ const toGood = (row: Array<string | Number>): Good => {
 const toShippingCosts = (row: Array<string | Number>): ShippingCosts => {
   return {
     name: String(row[0]),
-    price: Number(row[1]),
+    pricePerBox: Number(row[1]),
     kgPerBox: Number(row[2])
   }
 }
