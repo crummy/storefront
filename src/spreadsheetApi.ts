@@ -38,7 +38,7 @@ export const addOrderRow = async (id: string, order: PlacedOrder): Promise<any> 
   const sheet = doc.sheetsByIndex.find((sheet: any) => sheet.title == ORDERS)
   await sheet.addRow([
     `=HYPERLINK("${websiteBaseUrl}/${order.shopId}/order/${order.id}", "${order.id}")`,
-    order.created.toISOString().replace("T", "").replace("Z", ""),
+    order.created.toISOString().replace("T", " ").replace("Z", " "),
     order.email,
     order.name,
     addressToString(order.address),
