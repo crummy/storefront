@@ -1,6 +1,8 @@
 import fetch from 'node-fetch'
+import { Response } from 'node-fetch'
 import { PlacedOrder, Address } from './order'
 import { OrderedGood } from './checkout'
+import { HttpError } from './error'
 
 const baseUrl = "https://sheets.googleapis.com/v4/spreadsheets"
 const maxRows = 1024
@@ -20,6 +22,7 @@ interface ValueRange {
 export const getShopRows = (id: string): Promise<Spreadsheet> => {
   const url = `${baseUrl}/${id}/values:batchGet?ranges=${PRICES}!A1:Z${maxRows}&ranges=${FIELDS}!A1:Z${maxRows}&ranges=${SHIPPING}!A1:Z${maxRows}&valueRenderOption=UNFORMATTED_VALUE&key=${apiKey}`
   return fetch(url)
+    .then(checkStatus)
     .then(response => response.json())
 }
 
@@ -40,7 +43,11 @@ export const addOrderRow = (id: string, order: PlacedOrder): Promise<any> => {
     ]
   }
   const url = `${baseUrl}/${id}/values/${body.range}:append?valueInputOption=USER_ENTERED&key=${apiKey}`
-  return fetch(url, { body: JSON.stringify(body) })
+  return fetch(url,
+    {
+      body: JSON.stringify(body),
+      headers: { 'Content-Type': 'application/json' }
+    }).then(checkStatus)
 }
 
 export const PRICES = "Prices"
@@ -55,4 +62,13 @@ const addressToString = (address: Address): string => {
 
 const goodsToString = (goods: OrderedGood[]): string => {
   return goods.map(good => `${good.quantity}${good.unit} ${good.name}`).join(', ')
+}
+
+const checkStatus = async (response: Response) => {
+  if (response.ok) {
+    return response
+  } else {
+    console.log(await response.json())
+    throw new HttpError(`An unexpected error occurred`, 500)
+  }
 }
