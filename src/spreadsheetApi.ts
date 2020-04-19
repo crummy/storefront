@@ -36,13 +36,14 @@ export const addOrderRow = async (id: string, order: PlacedOrder): Promise<any> 
   await doc.loadInfo();
   const sheet = doc.sheetsByIndex.find((sheet: any) => sheet.title == ORDERS)
   await sheet.addRow([
-        `=HYPERLINK(${baseUrl}/${order.shopId}/order/${order.id}, ${order.id})`,
-        order.created.toISOString().replace("T", "").replace("Z", ""),
-        order.email,
-        order.name,
-        addressToString(order.address),
-        goodsToString(order.goods),
-        order.goods.map(good => good.price * good.quantity).reduce((a, b) => a + b, 0)
+    `=HYPERLINK(${baseUrl}/${order.shopId}/order/${order.id}, ${order.id})`,
+    order.created.toISOString().replace("T", "").replace("Z", ""),
+    order.email,
+    order.name,
+    addressToString(order.address),
+    goodsToString(order.goods),
+    order.goods.map(good => good.price * good.quantity).reduce((a, b) => a + b, 0)
+  ]
   )
 }
 
