@@ -5,7 +5,8 @@ import { OrderedGood } from './checkout'
 import { HttpError } from './error'
 import { GoogleSpreadsheet } from 'google-spreadsheet'
 
-const baseUrl = "https://sheets.googleapis.com/v4/spreadsheets"
+const apiBaseUrl = "https://sheets.googleapis.com/v4/spreadsheets"
+const websiteBaseUrl = process.env.WEBSITE_BASE_URL!!
 const maxRows = 1024
 const apiKey = process.env.GOOGLE_API_KEY
 
@@ -21,7 +22,7 @@ interface ValueRange {
 }
 
 export const getShopRows = (id: string): Promise<Spreadsheet> => {
-  const url = `${baseUrl}/${id}/values:batchGet?ranges=${PRICES}!A1:Z${maxRows}&ranges=${FIELDS}!A1:Z${maxRows}&ranges=${SHIPPING}!A1:Z${maxRows}&valueRenderOption=UNFORMATTED_VALUE&key=${apiKey}`
+  const url = `${apiBaseUrl}/${id}/values:batchGet?ranges=${PRICES}!A1:Z${maxRows}&ranges=${FIELDS}!A1:Z${maxRows}&ranges=${SHIPPING}!A1:Z${maxRows}&valueRenderOption=UNFORMATTED_VALUE&key=${apiKey}`
   return fetch(url)
     .then(checkStatus)
     .then(response => response.json())
@@ -36,7 +37,7 @@ export const addOrderRow = async (id: string, order: PlacedOrder): Promise<any> 
   await doc.loadInfo();
   const sheet = doc.sheetsByIndex.find((sheet: any) => sheet.title == ORDERS)
   await sheet.addRow([
-    `=HYPERLINK(${baseUrl}/${order.shopId}/order/${order.id}, ${order.id})`,
+    `=HYPERLINK("${websiteBaseUrl}/${order.shopId}/order/${order.id}", "${order.id}")`,
     order.created.toISOString().replace("T", "").replace("Z", ""),
     order.email,
     order.name,
