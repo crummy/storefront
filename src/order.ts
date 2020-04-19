@@ -22,7 +22,21 @@ export interface Order {
   email: string
 }
 
-export const get = async (id: string): Promise<SavedOrder | null> => {
+export interface PlacedOrder extends SavedOrder {
+  name: string,
+  address: Address
+}
+
+export interface Address {
+  city: string,
+  country: string,
+  line1: string,
+  line2: string,
+  postal_code: string,
+  state: string
+}
+
+export const get = async (id: string): Promise<SavedOrder | PlacedOrder | null> => {
   const params = {
     TableName: tableName,
     Key: {
@@ -33,7 +47,9 @@ export const get = async (id: string): Promise<SavedOrder | null> => {
     .promise()
     .then(result => result.Item)
     .then(item => {
-      if (item) {
+      if (item && item.state == State.PAID) {
+        return { id: item.id, goods: item.goods, email: item.email, created: new Date(item.created), shopId: item.shopId, state: item.state, name: item.name, address: item.address }
+      } else if (item) {
         return { id: item.id, goods: item.goods, email: item.email, created: new Date(item.created), shopId: item.shopId, state: item.state }
       } else {
         return null
@@ -51,7 +67,7 @@ export const put = async (order: Order): Promise<string> => {
   return id
 }
 
-export const setState = async (id: string, state: State) => {
+export const updateOrderCancelled = async (id: string) => {
   const params = {
     TableName: tableName,
     Key: { id },
@@ -60,7 +76,20 @@ export const setState = async (id: string, state: State) => {
       "#state": "state"
     },
     ExpressionAttributeValues: {
-      ":state": state
+      ":state": State.CANCELLED
+    }
+  }
+  await ddb.update(params).promise()
+}
+
+export const updateOrderPlaced = async (id: string, name: string, address: Address) => {
+  const params = {
+    TableName: tableName,
+    Key: { id },
+    AttributeUpdates: {
+      state: { Action: "PUT", Value: State.PAID},
+      address: { Action: "PUT", Value: address },
+      name: { Action: "PUT", Value: name}
     }
   }
   await ddb.update(params).promise()

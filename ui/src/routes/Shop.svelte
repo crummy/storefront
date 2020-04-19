@@ -30,17 +30,23 @@
   }
 
   const handleCheckout = async () => {
-    if (total == 0) {
-      error = "";
+    if (subtotal == 0) {
+      error = "No items have been selected";
+      return
     }
     document.querySelector("#checkoutButton").classList.add("disabled");
     const order = {
       goods: shop.goods.filter(good => good.quantity > 0),
       email,
-      shipping: selectedShippingOption
+      shipping: selectedShippingOption.name
     };
     const response = await checkout(shopId, order);
     const json = await response.json();
+    if (!response.ok) {
+      const reason = json.error ? json.error : "An unknown error occurred"
+      error = `Checkout failed: ${reason}`
+      return
+    }
     var stripe = Stripe(json.stripeKey);
     stripe
       .redirectToCheckout({

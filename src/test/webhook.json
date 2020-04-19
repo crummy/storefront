@@ -1,0 +1,70 @@
+{
+  "data": {
+    "object": {
+      "id": "cs_test_o3836gLsAp9ZI92DN9X39HfzxarNnl6RBVd7xHybFynBo1gSGpfXfEOQ",
+      "object": "checkout.session",
+      "billing_address_collection": null,
+      "cancel_url": "https://storefront.nz/windsong/order/3d792e5f-3d3c-4363-b26b-612fdc4e7f6a/cancel",
+      "client_reference_id": "3d792e5f-3d3c-4363-b26b-612fdc4e7f6a",
+      "customer": "cus_H7dV5uSqgVLLks",
+      "customer_email": "email@email.com",
+      "display_items": [
+        {
+          "amount": 600,
+          "currency": "nzd",
+          "custom": [
+            null
+          ],
+          "quantity": 4,
+          "type": "custom"
+        },
+        {
+          "amount": 600,
+          "currency": "nzd",
+          "custom": [
+            null
+          ],
+          "quantity": 43,
+          "type": "custom"
+        },
+        {
+          "amount": 10000,
+          "currency": "nzd",
+          "custom": [
+            null
+          ],
+          "quantity": 1,
+          "type": "custom"
+        }
+      ],
+      "livemode": false,
+      "locale": null,
+      "metadata": {},
+      "mode": "payment",
+      "payment_intent": "pi_1GZOE2C8geFWEb6j9l6E28qy",
+      "payment_method_types": [
+        "card"
+      ],
+      "setup_intent": null,
+      "shipping": {
+        "address": {
+          "city": "Auckland",
+          "country": "NZ",
+          "line1": "1 First Street",
+          "line2": "",
+          "postal_code": "90210",
+          "state": ""
+        },
+        "name": "Test User"
+      },
+      "shipping_address_collection": {
+        "allowed_countries": [
+          "NZ"
+        ]
+      },
+      "submit_type": null,
+      "subscription": null,
+      "success_url": "https://storefront.nz/windsong/order/3d792e5f-3d3c-4363-b26b-612fdc4e7f6a?sessionId={CHECKOUT_SESSION_ID}"
+    }
+  }
+}
