@@ -3,6 +3,7 @@ import { Response } from 'node-fetch'
 import { PlacedOrder, Address } from './order'
 import { OrderedGood } from './checkout'
 import { HttpError } from './error'
+import { GoogleSpreadsheet } from 'google-spreadsheet'
 
 const baseUrl = "https://sheets.googleapis.com/v4/spreadsheets"
 const maxRows = 1024
@@ -26,29 +27,23 @@ export const getShopRows = (id: string): Promise<Spreadsheet> => {
     .then(response => response.json())
 }
 
-export const addOrderRow = (id: string, order: PlacedOrder): Promise<any> => {
-  const body: ValueRange = {
-    range: `${ORDERS}!A1:E1`,
-    majorDimension: "ROWS",
-    values: [
-      [
-        order.id,
-        order.created.toISOString(),
+export const addOrderRow = async (id: string, order: PlacedOrder): Promise<any> => {
+  const doc = new GoogleSpreadsheet(id)
+  await doc.useServiceAccountAuth({
+    client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
+    private_key: process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY?.replace(/\\n/g, "\n"),
+  })
+  await doc.loadInfo();
+  const sheet = doc.sheetsByIndex.find((sheet: any) => sheet.title == ORDERS)
+  await sheet.addRow([
+        `=HYPERLINK(${baseUrl}/${order.shopId}/order/${order.id}, ${order.id})`,
+        order.created.toISOString().replace("T", "").replace("Z", ""),
         order.email,
         order.name,
         addressToString(order.address),
         goodsToString(order.goods),
-        order.state
-      ]
-    ]
-  }
-  const url = `${baseUrl}/${id}/values/${body.range}:append?valueInputOption=USER_ENTERED&key=${apiKey}`
-  return fetch(url,
-    {
-      method: 'POST',
-      body: JSON.stringify(body),
-      headers: { 'Content-Type': 'application/json' }
-    }).then(checkStatus)
+        order.goods.map(good => good.price * good.quantity).reduce((a, b) => a + b, 0)
+  )
 }
 
 export const PRICES = "Prices"

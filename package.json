@@ -12,6 +12,7 @@
     "local": "npm run build && serverless offline start"
   },
   "dependencies": {
+    "google-spreadsheet": "^3.0.11",
     "node-fetch": "^2.6.0",
     "stripe": "^8.39.2",
     "uuid": "^7.0.3"
