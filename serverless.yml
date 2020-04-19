@@ -31,6 +31,7 @@ provider:
     GOOGLE_SERVICE_ACCOUNT_EMAIL: ${ssm:/api/${self:provider.stage}/google-service-account-email~true}
     GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY: ${ssm:/api/${self:provider.stage}/google-service-account-private-key~true}
     WEBSITE_BASE_URL: ${cf.us-east-1:simple-sell-ui.WebsiteURL}
+    ORDER_CREATED_SES_TEMPLATE: orderCreated_${self:provider.stage}
 
 package:
   exclude:

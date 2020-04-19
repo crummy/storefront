@@ -17,7 +17,8 @@ add-shop:
 	test -n "$(SPREADSHEET_ID)"
 	test -n "$(STRIPE_PUBLIC_KEY)"
 	test -n "$(STRIPE_SECRET_KEY)"
-	aws dynamodb put-item --table-name shop-config-$(STAGE) --item '{"id": {"S": "$(ID)"}, "spreadsheetId": {"S": "$(SPREADSHEET_ID)"}, "stripeKey": {"S":"$(STRIPE_PUBLIC_KEY)"}, "stripeSecretKey": {"S":"$(STRIPE_SECRET_KEY)"}}'
+	test -n "$(EMAIL)"
+	aws dynamodb put-item --table-name shop-config-$(STAGE) --item '{"id": {"S": "$(ID)"}, "email": {"S": "$(EMAIL)"}, "spreadsheetId": {"S": "$(SPREADSHEET_ID)"}, "stripeKey": {"S":"$(STRIPE_PUBLIC_KEY)"}, "stripeSecretKey": {"S":"$(STRIPE_SECRET_KEY)"}}'
 	curl https://api.stripe.com/v1/webhook_endpoints \
   	-u $(STRIPE_SECRET_KEY): \
   	-d limit=1 -G \

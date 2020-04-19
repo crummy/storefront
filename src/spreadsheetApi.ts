@@ -6,7 +6,7 @@ import { HttpError } from './error'
 import { GoogleSpreadsheet } from 'google-spreadsheet'
 
 const apiBaseUrl = "https://sheets.googleapis.com/v4/spreadsheets"
-const websiteBaseUrl = process.env.WEBSITE_BASE_URL!!
+const websiteBaseUrl = process.env.WEBSITE_BASE_URL!
 const maxRows = 1024
 const apiKey = process.env.GOOGLE_API_KEY
 

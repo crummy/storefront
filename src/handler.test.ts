@@ -22,7 +22,8 @@ const shopConfig: ShopConfig = {
   id: 'shop',
   spreadsheetId: 'spreadsheetId',
   stripeKey: 'stripeKey',
-  stripeSecretKey: 'stripeSecretKey'
+  stripeSecretKey: 'stripeSecretKey',
+  email: 'email@email.com'
 }
 
 describe('getShop', () => {

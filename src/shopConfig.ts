@@ -6,7 +6,8 @@ export interface ShopConfig {
   id: string,
   spreadsheetId: string,
   stripeKey: string,
-  stripeSecretKey: string
+  stripeSecretKey: string,
+  email: string
 }
 
 export const get = async (id: string): Promise<ShopConfig | null> => {
