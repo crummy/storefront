@@ -1,7 +1,9 @@
 import { get as readShop } from './shop'
-import { createOrder, OrderedGood } from './checkout'
-import { get as readOrder, query as readOrders, State, updateOrderCancelled, updateOrderPlaced } from './order'
+import { get as getShopConfig } from './shopConfig'
+import { createOrder } from './checkout'
+import { get as readOrder, query as readOrders, State, updateOrderCancelled, updateOrderPlaced, PlacedOrder } from './order'
 import { HttpError } from './error'
+import { addOrderRow } from './spreadsheetApi'
 
 interface Response {
   statusCode: number,
@@ -83,6 +85,9 @@ export const stripeWebhook = async ({ body }: Event): Promise<Response> => {
     const { data: { object: { client_reference_id, shipping: { address, name } } } } = JSON.parse(body!)
     const orderId = client_reference_id
     await updateOrderPlaced(orderId, name, address)
+    const order = await readOrder(orderId) // TODO - can I update and get in the same call?
+    const shopConfig = await getShopConfig(order!.shopId)
+    await addOrderRow(shopConfig!.spreadsheetId, order as PlacedOrder)
     return ok()
   } catch (e) {
     return error(e)

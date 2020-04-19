@@ -4,8 +4,8 @@ echo "Starting DynamoDB..."
 
 # Only run the container if it is not exist (just to save some time at local)
 if ! docker ps --format '{{.Names}}' | egrep '^simple-sell-dynamodb$' &> /dev/null; then
-  docker container stop usage-api-dynamodb
-  docker container rm usage-api-dynamodb
+  docker container stop simple-sell-dynamodb
+  docker container rm simple-sell-dynamodb
   docker run --rm --name simple-sell-dynamodb -p 8000:8000 -d cnadiminti/dynamodb-local
 fi
 

@@ -1,4 +1,6 @@
 import fetch from 'node-fetch'
+import { PlacedOrder, Address } from './order'
+import { OrderedGood } from './checkout'
 
 const baseUrl = "https://sheets.googleapis.com/v4/spreadsheets"
 const maxRows = 1024
@@ -21,6 +23,36 @@ export const getShopRows = (id: string): Promise<Spreadsheet> => {
     .then(response => response.json())
 }
 
+export const addOrderRow = (id: string, order: PlacedOrder): Promise<any> => {
+  const body: ValueRange = {
+    range: `${ORDERS}!A1:E1`,
+    majorDimension: "ROWS",
+    values: [
+      [
+        order.id,
+        order.created.toISOString(),
+        order.email,
+        order.name,
+        addressToString(order.address),
+        goodsToString(order.goods),
+        order.state
+      ]
+    ]
+  }
+  const url = `${baseUrl}/${id}/values/${body.range}:append?valueInputOption=USER_ENTERED&key=${apiKey}`
+  return fetch(url, { body: JSON.stringify(body) })
+}
+
 export const PRICES = "Prices"
 export const FIELDS = "Customization"
 export const SHIPPING = "Shipping"
+export const ORDERS = "Orders"
+
+// TODO - can these be attached to the interface itself? extension methods?
+const addressToString = (address: Address): string => {
+  return `${address.line1}, ${address.line2}, ${address.city}, ${address.state}`
+}
+
+const goodsToString = (goods: OrderedGood[]): string => {
+  return goods.map(good => `${good.quantity}${good.unit} ${good.name}`).join(', ')
+}

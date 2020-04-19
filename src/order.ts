@@ -33,7 +33,8 @@ export interface Address {
   line1: string,
   line2: string,
   postal_code: string,
-  state: string
+  state: string,
+  toString(): String
 }
 
 export const get = async (id: string): Promise<SavedOrder | PlacedOrder | null> => {
@@ -48,9 +49,9 @@ export const get = async (id: string): Promise<SavedOrder | PlacedOrder | null> 
     .then(result => result.Item)
     .then(item => {
       if (item && item.state == State.PAID) {
-        return { id: item.id, goods: item.goods, email: item.email, created: new Date(item.created), shopId: item.shopId, state: item.state, name: item.name, address: item.address }
+        return toPlacedOrder(item)
       } else if (item) {
-        return { id: item.id, goods: item.goods, email: item.email, created: new Date(item.created), shopId: item.shopId, state: item.state }
+        return toSavedOrder(item)
       } else {
         return null
       }
@@ -87,10 +88,11 @@ export const updateOrderPlaced = async (id: string, name: string, address: Addre
     TableName: tableName,
     Key: { id },
     AttributeUpdates: {
-      state: { Action: "PUT", Value: State.PAID},
+      state: { Action: "PUT", Value: State.PAID },
       address: { Action: "PUT", Value: address },
-      name: { Action: "PUT", Value: name}
-    }
+      name: { Action: "PUT", Value: name }
+    },
+    ReturnValues: "ALL_NEW"
   }
   await ddb.update(params).promise()
 }
@@ -105,14 +107,25 @@ export const query = async (shopId: string): Promise<SavedOrder[]> => {
     }
   }
   return ddb.query(params).promise()
-    .then(result => result.Items?.map(item => toOrder(item)) || [])
+    .then(result => result.Items?.map(item => toSavedOrder(item)) || [])
 }
 
-const toOrder = (item: any): SavedOrder => ({
+const toSavedOrder = (item: any): SavedOrder => ({
   id: item.id,
   goods: item.goods,
   created: new Date(item.created),
   shopId: item.shopId,
   email: item.email,
   state: item.state
+})
+
+const toPlacedOrder = (item: any): PlacedOrder => ({
+  id: item.id,
+  goods: item.goods,
+  email: item.email,
+  created: new Date(item.created),
+  shopId: item.shopId,
+  state: item.state,
+  name: item.name,
+  address: item.address
 })
