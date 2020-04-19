@@ -1,6 +1,6 @@
 import { get as readShop } from './shop'
 import { get as getShopConfig } from './shopConfig'
-import { createOrder } from './checkout'
+import { createOrder, OrderedGood } from './checkout'
 import { get as readOrder, query as readOrders, State, updateOrderCancelled, updateOrderPlaced, PlacedOrder } from './order'
 import { HttpError } from './error'
 import { addOrderRow } from './spreadsheetApi'
@@ -33,6 +33,9 @@ export const checkout = async ({ pathParameters, body }: Event): Promise<Respons
     const order = JSON.parse(body!)
     if (order.goods.length == 0) {
       throw new HttpError(`Cannot create an order with no goods`, 409)
+    }
+    if (order.goods.map((good: OrderedGood) => good.quantity < 0)) {
+      throw new HttpError(`Tried to order goods with negative quantity`, 409)
     }
     const result = await createOrder(shopId, order.email, order.goods, order.shipping)
     return ok(result)

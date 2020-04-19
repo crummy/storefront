@@ -69,7 +69,7 @@
 
   .menu {
     display: grid;
-    grid-template-columns: 80% 20%;
+    grid-template-columns: auto 100px;
     align-items: center;
   }
 
@@ -94,6 +94,10 @@
     padding-left: 30%;
   }
 
+  .total, .shippingTotal, .subTotal {
+    text-align: center;
+  }
+
   .totalLabel,
   .total {
     font-weight: bold;
@@ -107,6 +111,20 @@
 
   .quantity {
     text-align: right;
+  }
+
+  .email {
+    grid-column: span 2;
+    text-align: right;
+  }
+
+  .quantityContainer {
+    text-align: right;
+  }
+
+  .quantityInput {
+    width: 100%;
+    text-align: center;
   }
 </style>
 
@@ -135,11 +153,12 @@
             <div class="comment">{good.comment}</div>
           {/if}
         </div>
-        <div>
+        <div class="quantityContainer">
           <input
             type="number"
             class="quantityInput"
-            bind:value={good.quantity} />
+            bind:value={good.quantity}
+            min=0 />
         </div>
       {/each}
       {#if shop.shippingCosts}
@@ -162,7 +181,7 @@
       <div class="totalLabel">Total</div>
       <div class="total">${total}</div>
 
-      <div>
+      <div class="email">
         <fieldset>
           <div class="pure-control-group">
             <label for="email">Email:</label>
