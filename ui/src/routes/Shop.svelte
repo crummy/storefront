@@ -91,7 +91,7 @@
   .subTotalLabel,
   .totalLabel,
   .shippingTotalLabel {
-    padding-left: 50%;
+    padding-left: 30%;
   }
 
   .totalLabel,

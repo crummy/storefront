@@ -20,34 +20,47 @@
 </script>
 
 <style>
+  .order {
+    display: grid;
+    grid-template-columns: 60% 20% 20%;
+    align-items: center;
+    grid-row-gap: 8px;
+  }
 
+   .header {
+    color: gray;
+    font-weight: bold;
+    font-size: 0.8em;
+    border-bottom: 1px solid lightgray;
+  }
+
+  .footer {
+    font-weight: bold;
+  }
+
+  .totalLabel {
+    grid-column: span 2
+  }
 </style>
 
 <main>
   <Header shopId={shop.id} title={shop.title} subtitle={shop.subtitle} />
   {#if message}
-    <h2>{message}</h2>
+    <div class="message">{message}</div>
   {/if}
-  <div class="menu">
-    <div class="row header">
-      <span>Item</span>
-      <span>Quantity</span>
-      <span>Price</span>
-    </div>
+  <div class="order">
+      <div class="header">Item</div>
+      <div class="header">Quantity</div>
+      <div class="header">Price</div>
     {#each order.goods as good}
-      <div class="row">
-        <span>{good.name}</span>
-        <span>
-          {good.quantity} {good.unit}
-          {#if good.quantity != 1}s{/if}
-        </span>
-        <span>${good.price * good.quantity}</span>
+      <div>{good.name}</div>
+      <div>
+        {good.quantity} {good.unit}{#if good.quantity != 1}s{/if}
       </div>
+      <div>${good.price * good.quantity}</div>
     {/each}
-    <div class="row footer">
-      <span>Total</span>
-      <span>${total}</span>
-    </div>
+    <div class="totalLabel footer">Total</div>
+    <div class="total footer">${total}</div>
   </div>
   {#if shop.footer}
     <Footer message={shop.footer} />
