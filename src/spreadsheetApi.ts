@@ -45,6 +45,7 @@ export const addOrderRow = (id: string, order: PlacedOrder): Promise<any> => {
   const url = `${baseUrl}/${id}/values/${body.range}:append?valueInputOption=USER_ENTERED&key=${apiKey}`
   return fetch(url,
     {
+      method: 'POST',
       body: JSON.stringify(body),
       headers: { 'Content-Type': 'application/json' }
     }).then(checkStatus)
