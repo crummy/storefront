@@ -23,6 +23,10 @@ provider:
       Resource:
         - "Fn::GetAtt": [ shopConfigTable, Arn ]
         - "Fn::GetAtt": [ orderTable, Arn ]
+    - Effect: Allow
+      Action:
+        - ses:SendEmail
+      Resource: "*"
 
   environment:
     SHOP_CONFIG_TABLE: shop-config-${self:provider.stage} # TODO: grab this from where it's declared
@@ -128,7 +132,6 @@ resources:
               ReadCapacityUnits: 5
               WriteCapacityUnits: 5
               
-
   Outputs:
     TableName:
       Value:
