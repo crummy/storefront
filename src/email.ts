@@ -7,7 +7,7 @@ import { OrderedGood } from './checkout'
 const orderCreatedTemplate = process.env.ORDER_CREATED_SES_TEMPLATE!
 const websiteBaseUrl = process.env.WEBSITE_BASE_URL!
 
-export const sendOrderNotification = (order: PlacedOrder, shopConfig: ShopConfig) => {
+export const sendOrderNotification = (order: PlacedOrder, shopConfig: ShopConfig): Promise<any> => {
   const link = `${websiteBaseUrl}/${order.shopId}/order/${order.id}`
   const address = addressToString(order.address)
   const goods = goodsToString(order.goods)
@@ -33,7 +33,8 @@ export const sendOrderNotification = (order: PlacedOrder, shopConfig: ShopConfig
       }
     }
   }
-  new AWS.SES({ apiVersion: '2010-12-01' }).sendEmail(params).promise()
+  const ses = new AWS.SES({ apiVersion: '2010-12-01' })
+  return ses.sendEmail(params).promise()
 }
 
 const addressToString = (address: Address): string => {
