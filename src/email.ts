@@ -4,7 +4,6 @@ import { Address } from './order'
 import AWS from 'aws-sdk'
 import { OrderedGood } from './checkout'
 
-const orderCreatedTemplate = process.env.ORDER_CREATED_SES_TEMPLATE!
 const websiteBaseUrl = process.env.WEBSITE_BASE_URL!
 
 export const sendOrderNotification = (order: PlacedOrder, shopConfig: ShopConfig): Promise<any> => {

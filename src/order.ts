@@ -19,12 +19,12 @@ export interface Order {
   goods: Array<OrderedGood>,
   shopId: string,
   created: Date,
-  email: string
 }
 
 export interface PlacedOrder extends SavedOrder {
   name: string,
-  address: Address
+  address: Address,
+  email: string
 }
 
 export interface Address {
@@ -82,14 +82,15 @@ export const updateOrderCancelled = async (id: string) => {
   await ddb.update(params).promise()
 }
 
-export const updateOrderPlaced = async (id: string, name: string, address: Address) => {
+export const updateOrderPlaced = async (id: string, name: string, address: Address, email: string) => {
   const params = {
     TableName: tableName,
     Key: { id },
     AttributeUpdates: {
       state: { Action: "PUT", Value: State.PAID },
       address: { Action: "PUT", Value: address },
-      name: { Action: "PUT", Value: name }
+      name: { Action: "PUT", Value: name },
+      email: { Action: "PUT", Value: email }
     },
     ReturnValues: "ALL_NEW"
   }
@@ -114,7 +115,6 @@ const toSavedOrder = (item: any): SavedOrder => ({
   goods: item.goods,
   created: new Date(item.created),
   shopId: item.shopId,
-  email: item.email,
   state: item.state
 })
 

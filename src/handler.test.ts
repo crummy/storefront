@@ -17,6 +17,7 @@ jest.mock('stripe', () => {
     }
   }))
 })
+jest.mock('./email')
 
 const shopConfig: ShopConfig = {
   id: 'shop',
@@ -88,7 +89,7 @@ describe('checkout', () => {
     expect(response.statusCode).toEqual(200)
     expect(JSON.parse(response.body)).toEqual(
       expect.objectContaining(
-        { id: orderId, goods: [{ name: "Omega plums", price: 6, quantity: 1, unit: "kg" }], email: 'email@email.com', shopId: shopConfig.id, state: State.PENDING_PAYMENT }
+        { id: orderId, goods: [{ name: "Omega plums", price: 6, quantity: 1, unit: "kg" }], shopId: shopConfig.id, state: State.PENDING_PAYMENT }
       )
     )
   })
@@ -162,7 +163,7 @@ const createOrder = async () => {
   const checkoutResponse = await checkout(
     {
       pathParameters: { shopId: shopConfig.id },
-      body: JSON.stringify({ email: 'email@email.com', goods: [{ name: "Omega plums", price: 6, quantity: 1, unit: "kg" }], shipping: 'Pickup' })
+      body: JSON.stringify({ goods: [{ name: "Omega plums", price: 6, quantity: 1, unit: "kg" }], shipping: 'Pickup' })
     })
   return JSON.parse(checkoutResponse.body)
 }

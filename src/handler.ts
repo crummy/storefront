@@ -37,7 +37,7 @@ export const checkout = async ({ pathParameters, body }: Event): Promise<Respons
     if (order.goods.some((good: OrderedGood) => good.quantity < 0)) {
       throw new HttpError(`Tried to order goods with negative quantity`, 409)
     }
-    const result = await createOrder(shopId, order.email, order.goods, order.shipping)
+    const result = await createOrder(shopId, order.goods, order.shipping)
     return ok(result)
   } catch (e) {
     return error(e)
@@ -86,13 +86,13 @@ export const getOrders = async ({ pathParameters }: Event): Promise<Response> =>
 
 export const stripeWebhook = async ({ body }: Event): Promise<Response> => {
   try {
-    const { data: { object: { client_reference_id, shipping: { address, name } } } } = JSON.parse(body!)
+    const { data: { object: { client_reference_id, customer_email, shipping: { address, name } } } } = JSON.parse(body!)
     const orderId = client_reference_id
-    await updateOrderPlaced(orderId, name, address)
-    const order = await readOrder(orderId) as PlacedOrder // TODO - can I update and get in the same call?
+    await updateOrderPlaced(orderId, name, address, customer_email)
+    const order = await readOrder(orderId) as PlacedOrder
     const shopConfig = await getShopConfig(order!.shopId)
     await addOrderRow(shopConfig!.spreadsheetId, order)
-    await sendOrderNotification(order!, shopConfig!)
+    await sendOrderNotification(order, shopConfig!)
     return ok()
   } catch (e) {
     return error(e)

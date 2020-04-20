@@ -4,7 +4,8 @@
 
 <style>
   p {
-    text-align: right
+    text-align: center;
+    font-size: 0.9em;
   }
 </style>
 

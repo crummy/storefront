@@ -6,8 +6,7 @@
   export let params;
   export const shopId = params.shopId;
   export const shop = params.shop;
-  let email = "",
-    error;
+  let error;
   let selectedShippingOption,
     shippingTotal = "";
 
@@ -32,20 +31,19 @@
   const handleCheckout = async () => {
     if (subtotal == 0) {
       error = "No items have been selected";
-      return
+      return;
     }
-    document.querySelector("#checkoutButton").classList.add("disabled");
+    document.querySelector("#checkoutButton").classList.add("pure-button-disabled");
     const order = {
       goods: shop.goods.filter(good => good.quantity > 0),
-      email,
       shipping: selectedShippingOption.name
     };
     const response = await checkout(shopId, order);
     const json = await response.json();
     if (!response.ok) {
-      const reason = json.error ? json.error : "An unknown error occurred"
-      error = `Checkout failed: ${reason}`
-      return
+      const reason = json.error ? json.error : "An unknown error occurred";
+      error = `Checkout failed: ${reason}`;
+      return;
     }
     var stripe = Stripe(json.stripeKey);
     stripe
@@ -67,10 +65,14 @@
     background-color: red;
   }
 
-  .menu {
+  .itemList {
     display: grid;
     grid-template-columns: auto 100px;
     align-items: center;
+    align-content: space-evenly;
+    border-bottom: 1px solid lightgray;
+    grid-row-gap: 1.5em;
+    padding-bottom: 1.5em;
   }
 
   .title {
@@ -79,6 +81,7 @@
 
   .comment {
     font-size: 0.9em;
+    font-style: italic;
   }
 
   .header {
@@ -88,33 +91,28 @@
     border-bottom: 1px solid lightgray;
   }
 
-  .subTotalLabel,
-  .totalLabel,
-  .shippingTotalLabel {
-    padding-left: 30%;
+  .totalList {
+    display: grid;
+    grid-template-columns: auto 100px;
+    grid-row-gap: 0.5em;
+    background-color: lightgray;
+    padding: 2em;
+    margin: 2em;
   }
 
-  .total, .shippingTotal, .subTotal {
+  .value {
     text-align: center;
   }
 
-  .totalLabel,
   .total {
     font-weight: bold;
   }
 
   .item {
-    vertical-align: center;
     font-size: 1.2em;
-    height: 3em;
   }
 
   .quantity {
-    text-align: right;
-  }
-
-  .email {
-    grid-column: span 2;
     text-align: right;
   }
 
@@ -125,6 +123,13 @@
   .quantityInput {
     width: 100%;
     text-align: center;
+  }
+
+  #checkoutButton {
+    padding: 1em;
+    width: 10em;
+    grid-column: span 2;
+    margin: 0 auto;
   }
 </style>
 
@@ -143,7 +148,7 @@
   <form
     class="pure-form pure-form-aligned"
     on:submit|preventDefault={handleCheckout}>
-    <div class="menu">
+    <div class="itemList">
       <div class="header">Item</div>
       <div class="header quantity">Quantity</div>
       {#each shop.goods as good}
@@ -158,14 +163,16 @@
             type="number"
             class="quantityInput"
             bind:value={good.quantity}
-            min=0 />
+            min="0" />
         </div>
       {/each}
+    </div>
+    <div class="totalList">
       {#if shop.shippingCosts}
-        <div class="subTotalLabel">Subtotal</div>
-        <div class="subTotal">${subtotal}</div>
+        <div class="label">Subtotal</div>
+        <div class="value">${subtotal}</div>
 
-        <div class="shippingTotalLabel">
+        <div class="label">
           Delivery to:
           <select id="shippingOption" bind:value={selectedShippingOption}>
             {#each shop.shippingCosts as shippingOption}
@@ -173,26 +180,17 @@
             {/each}
           </select>
         </div>
-        <div class="shippingTotal">
+        <div class="value">
           {#if shippingTotal}${shippingTotal}{/if}
         </div>
       {/if}
 
-      <div class="totalLabel">Total</div>
-      <div class="total">${total}</div>
-
-      <div class="email">
-        <fieldset>
-          <div class="pure-control-group">
-            <label for="email">Email:</label>
-            <input id="email" type="email" bind:value={email} required />
-          </div>
-        </fieldset>
-      </div>
+      <div class="label total">Total</div>
+      <div class="value total">${total}</div>
+      <button type="submit" class="pure-button" id="checkoutButton">
+        Purchase
+      </button>
     </div>
-    <button type="submit" class="pure-button" id="checkoutButton">
-      Checkout
-    </button>
   </form>
   {#if shop.footer}
     <Footer message={shop.footer} />
