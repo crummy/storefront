@@ -2,7 +2,7 @@
 simpleseller.iml
 target/
 ui/node_modules
-ui/public
+ui/public/build
 node_modules
 dist
 .serverless

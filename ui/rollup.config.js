@@ -4,7 +4,6 @@ import commonjs from '@rollup/plugin-commonjs';
 import livereload from 'rollup-plugin-livereload';
 import { terser } from 'rollup-plugin-terser';
 import replace from '@rollup/plugin-replace';
-import static_files from 'rollup-plugin-static-files';
 
 const production = !process.env.ROLLUP_WATCH;
 const apiUrl = "https://dev.storefront.nz" // TODO: different one for prod
@@ -26,9 +25,6 @@ export default {
 			css: css => {
 				css.write('public/build/bundle.css');
 			}
-		}),
-		static_files({
-			include: ['./static']
 		}),
 		replace({
 			process: JSON.stringify({
