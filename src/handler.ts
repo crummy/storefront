@@ -86,9 +86,9 @@ export const getOrders = async ({ pathParameters }: Event): Promise<Response> =>
 
 export const stripeWebhook = async ({ body }: Event): Promise<Response> => {
   try {
-    const { data: { object: { client_reference_id, customer_email, shipping: { address, name } } } } = JSON.parse(body!)
+    const { data: { object: { client_reference_id, customer_details: { email }, shipping: { address, name } } } } = JSON.parse(body!)
     const orderId = client_reference_id
-    await updateOrderPlaced(orderId, name, address, customer_email)
+    await updateOrderPlaced(orderId, name, address, email)
     const order = await readOrder(orderId) as PlacedOrder
     const shopConfig = await getShopConfig(order!.shopId)
     await addOrderRow(shopConfig!.spreadsheetId, order)

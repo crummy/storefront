@@ -1,5 +1,5 @@
 <script>
-  export let shopId, title, subtitle;
+  export let shopId, title, subtitle, note1, note2;
 </script>
 
 <style>
@@ -29,4 +29,10 @@
 </h1>
 {#if subtitle}
   <h2>{subtitle}</h2>
+{/if}
+{#if note1}
+  <h3>{note1}</h3>
+{/if}
+{#if note2}
+  <h3>{note2}</h3>
 {/if}

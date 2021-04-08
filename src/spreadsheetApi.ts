@@ -55,7 +55,7 @@ export const ORDERS = "Orders"
 
 // TODO - can these be attached to the interface itself? extension methods?
 const addressToString = (address: Address): string => {
-  return `${address.line1}, ${address.line2}, ${address.city}, ${address.state}`
+  return `${address.line1}, ${address.line2}, ${address.city}, ${address.state}, ${address.postal_code}`
 }
 
 const goodsToString = (goods: OrderedGood[]): string => {

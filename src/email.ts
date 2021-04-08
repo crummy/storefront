@@ -19,11 +19,11 @@ export const sendOrderNotification = (order: PlacedOrder, shopConfig: ShopConfig
       Body: {
         Html: {
           Charset: "UTF-8",
-          Data: `<h1>Storefront.nz Order for ${order.shopId}</h1><h2><a href="${link}">Order ID ${order.id}</a></h2>Deliver <b>${goods}</b> to: ${order.name}, ${address}`
+          Data: `<h1>Storefront.nz Order for ${order.shopId}</h1><h2><a href="${link}">Order ID ${order.id}</a></h2>Deliver <b>${goods}</b> to: <br/><a href="mailto:${order.email}">${order.name}</a><br/>, ${address}`
         },
         Text: {
           Charset: "UTF-8",
-          Data: `Storefront.nz Order for ${order.shopId}\r\nOrder ID ${order.id}\r\nDeliver ${goods} to: ${order.name}, ${address}`
+          Data: `Storefront.nz Order for ${order.shopId}\r\nOrder ID ${order.id}\r\nDeliver ${goods} to:\r\n${order.name} - ${order.email}\r\n${address}`
         }
       },
       Subject: {

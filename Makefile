@@ -35,3 +35,6 @@ set-google-api-key:
 deploy:
 	npm run build
 	serverless deploy
+
+env: # doesn't work
+	export $(cat .env | xargs)
