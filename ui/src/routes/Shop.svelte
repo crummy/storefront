@@ -45,7 +45,7 @@
       error = `Checkout failed: ${reason}`;
       return;
     }
-    var stripe = Stripe(json.stripeKey);
+    const stripe = Stripe(json.stripeKey);
     stripe
       .redirectToCheckout({
         sessionId: json.sessionId
@@ -131,6 +131,10 @@
     grid-column: span 2;
     margin: 0 auto;
   }
+
+  h3 {
+    font-weight: normal;
+  }
 </style>
 
 <svelte:options accessors={true} />
@@ -138,9 +142,15 @@
   <script src="https://js.stripe.com/v3/">
 
   </script>
-  <Header shopId={shop.id} title={shop.title} subtitle={shop.subtitle} note1={shop.note1} note2={shop.note2} />
+  <Header shopId={shop.id} title={shop.title} subtitle={shop.subtitle}/>
   {#if shop.message && !error}
     <div class="message">{shop.message}</div>
+  {/if}
+  {#if shop.note1}
+    <h3>{shop.note1}</h3>
+  {/if}
+  {#if shop.note2}
+    <h3>{shop.note2}</h3>
   {/if}
   {#if error}
     <div class="message error">{error}</div>

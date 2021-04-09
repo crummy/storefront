@@ -1,5 +1,5 @@
 <script>
-  export let shopId, title, subtitle, note1, note2;
+  export let shopId, title, subtitle;
 </script>
 
 <style>
@@ -15,7 +15,7 @@
   h2 {
     text-align: center;
     font-size: 1.2em;
-    font-weight: normal;
+    font-weight: bold;
   }
 
   a, a:visited, a:hover {
@@ -29,10 +29,4 @@
 </h1>
 {#if subtitle}
   <h2>{subtitle}</h2>
-{/if}
-{#if note1}
-  <h3>{note1}</h3>
-{/if}
-{#if note2}
-  <h3>{note2}</h3>
 {/if}

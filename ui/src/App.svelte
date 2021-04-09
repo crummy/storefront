@@ -49,7 +49,7 @@
   }
 
   :global(.message) {
-    background-color: #ffc4b0;
+    background-color: palegreen;
     padding: 1em;
     text-align: center;
     margin-bottom: 1em;
