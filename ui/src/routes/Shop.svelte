@@ -142,7 +142,7 @@
   <script src="https://js.stripe.com/v3/">
 
   </script>
-  <Header shopId={shop.id} title={shop.title} subtitle={shop.subtitle}/>
+  <Header shopId={shop.id} title={shop.title} subtitle={shop.subtitle} logo={shop.logo}/>
   {#if shop.message && !error}
     <div class="message">{shop.message}</div>
   {/if}

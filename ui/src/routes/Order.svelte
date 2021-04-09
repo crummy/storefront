@@ -43,7 +43,7 @@
 </style>
 
 <main>
-  <Header shopId={shop.id} title={shop.title} subtitle={shop.subtitle} />
+  <Header shopId={shop.id} title={shop.title} subtitle={shop.subtitle} logo={shop.logo}/>
   {#if message}
     <div class="message">{message}</div>
   {/if}
