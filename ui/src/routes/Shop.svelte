@@ -32,6 +32,9 @@
     if (subtotal == 0) {
       error = "No items have been selected";
       return;
+    } else if (selectedShippingOption === undefined) {
+      error = "Please select a shipping option";
+      return;
     }
     document.querySelector("#checkoutButton").classList.add("pure-button-disabled");
     const order = {
@@ -185,6 +188,7 @@
         <div class="label">
           Delivery to:
           <select id="shippingOption" bind:value={selectedShippingOption}>
+            <option value={undefined} disabled>Choose a shipping option</option>
             {#each shop.shippingCosts as shippingOption}
               <option value={shippingOption}>{shippingOption.name}</option>
             {/each}
