@@ -132,6 +132,18 @@
     margin: 0 auto;
   }
 
+  .splash-image {
+    max-width: 800px;
+  }
+
+  .splash-image img {
+    max-width: inherit;
+  }
+
+  .order-form {
+    padding-top: 1em;
+  }
+
   h3 {
     font-weight: normal;
   }
@@ -152,11 +164,14 @@
   {#if shop.note2}
     <h3>{shop.note2}</h3>
   {/if}
+  {#if shop.splashImage}
+    <div class="splash-image"><img alt="splash" src={shop.splashImage}/></div>
+  {/if}
   {#if error}
     <div class="message error">{error}</div>
   {/if}
   <form
-    class="pure-form pure-form-aligned"
+    class="pure-form pure-form-aligned order-form"
     on:submit|preventDefault={handleCheckout}>
     <div class="itemList">
       <div class="header">Item</div>
