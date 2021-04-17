@@ -43,7 +43,8 @@ export const addOrderRow = async (id: string, order: PlacedOrder): Promise<any> 
     order.name,
     addressToString(order.address),
     goodsToString(order.goods),
-    order.goods.map(good => good.price * good.quantity).reduce((a, b) => a + b, 0)
+    order.goods.map(good => good.price * good.quantity).reduce((a, b) => a + b, 0),
+    order.note
   ]
   )
 }

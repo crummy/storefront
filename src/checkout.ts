@@ -15,7 +15,7 @@ interface CreateOrderResponse {
   orderId: string
 }
 
-export const createOrder = async (shopId: string, goods: OrderedGood[], shipping: string): Promise<CreateOrderResponse> => {
+export const createOrder = async (shopId: string, goods: OrderedGood[], shipping: string, note: string): Promise<CreateOrderResponse> => {
   const shopConfig = await getShopConfig(shopId)
   if (!shopConfig) {
     throw new HttpError(`No shop found: ${shopId}`, 404)
@@ -26,7 +26,7 @@ export const createOrder = async (shopId: string, goods: OrderedGood[], shipping
 
   const stripe = new Stripe(shopConfig.stripeSecretKey, { apiVersion: '2020-03-02' });
 
-  const orderId = await putOrder({ goods, shopId, created: new Date() })
+  const orderId = await putOrder({ goods, shopId, note, created: new Date() })
 
   const lineItems = goods.map(good => ({
     name: good.name,

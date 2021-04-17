@@ -9,6 +9,8 @@
   let error;
   let selectedShippingOption,
     shippingTotal = "";
+  let isNoteVisible = false;
+  let note = "";
 
   $: subtotal = shop.goods
     .map(good => good.price * (good.quantity ? good.quantity : 0))
@@ -39,7 +41,8 @@
     document.querySelector("#checkoutButton").classList.add("pure-button-disabled");
     const order = {
       goods: shop.goods.filter(good => good.quantity > 0),
-      shipping: selectedShippingOption.name
+      shipping: selectedShippingOption.name,
+      note
     };
     const response = await checkout(shopId, order);
     const json = await response.json();
@@ -150,6 +153,17 @@
   h3 {
     font-weight: normal;
   }
+
+  .add-note button {
+    all: unset;
+    cursor: pointer;
+    color: blue;
+    border-bottom: 1px dashed blue;
+  }
+
+  .note textarea {
+    width: 100%;
+  }
 </style>
 
 <svelte:options accessors={true} />
@@ -216,6 +230,11 @@
 
       <div class="label total">Total</div>
       <div class="value total">${total}</div>
+      {#if isNoteVisible}
+        <div class="note"><textarea bind:value={note} placeholder="Add a note"></textarea></div>
+      {:else}
+        <div class="add-note"><button type="button" on:click|once={() => isNoteVisible = true}>Add a note...</button></div>
+      {/if}
       <button type="submit" class="pure-button" id="checkoutButton">
         Purchase
       </button>

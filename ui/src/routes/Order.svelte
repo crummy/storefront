@@ -40,6 +40,10 @@
   .totalLabel {
     grid-column: span 2
   }
+
+  .note {
+    font-style: italic;
+  }
 </style>
 
 <main>
@@ -54,12 +58,15 @@
     {#each order.goods as good}
       <div>{good.name}</div>
       <div>
-        {good.quantity} {good.unit}{#if good.quantity != 1}s{/if}
+        {good.quantity} {good.unit}{#if good.quantity !== 1}s{/if}
       </div>
       <div>${good.price * good.quantity}</div>
     {/each}
     <div class="totalLabel footer">Total</div>
     <div class="total footer">${total}</div>
+    {#if order.note}
+      <div class="note">{order.note}</div>
+    {/if}
   </div>
   {#if shop.footer}
     <Footer message={shop.footer} />
