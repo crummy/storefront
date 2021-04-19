@@ -19,7 +19,9 @@ export interface Order {
   goods: Array<OrderedGood>,
   shopId: string,
   created: Date,
-  note?: string
+  note?: string,
+  shipping?: string,
+  shippingCost?: number
 }
 
 export interface PlacedOrder extends SavedOrder {
@@ -117,7 +119,9 @@ const toSavedOrder = (item: any): SavedOrder => ({
   created: new Date(item.created),
   shopId: item.shopId,
   state: item.state,
-  note: item.note
+  note: item.note,
+  shipping: item.shipping,
+  shippingCost: item.shippingCost
 })
 
 const toPlacedOrder = (item: any): PlacedOrder => ({
@@ -129,5 +133,7 @@ const toPlacedOrder = (item: any): PlacedOrder => ({
   state: item.state,
   name: item.name,
   address: item.address,
-  note: item.note
+  note: item.note,
+  shipping: item.shipping,
+  shippingCost: item.shippingCost
 })
