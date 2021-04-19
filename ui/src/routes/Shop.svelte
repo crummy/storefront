@@ -12,6 +12,8 @@
   let isNoteVisible = false;
   let note = "";
 
+  const formatPrice = (price) => '$' + Number(price).toFixed(2);
+
   $: subtotal = shop.goods
     .map(good => good.price * (good.quantity ? good.quantity : 0))
     .reduce((a, b) => a + b, 0);
@@ -195,7 +197,7 @@
       <div class="header quantity">Quantity</div>
       {#each shop.goods as good}
         <div class="item">
-          <span class="title">{good.name}</span>, ${good.price}/{good.unit}
+          <span class="title">{good.name}</span>, {formatPrice(good.price)}/{good.unit}
           {#if good.comment}
             <div class="comment">{good.comment}</div>
           {/if}
@@ -212,7 +214,7 @@
     <div class="totalList">
       {#if shop.shippingCosts}
         <div class="label">Subtotal</div>
-        <div class="value">${subtotal}</div>
+        <div class="value">{formatPrice(subtotal)}</div>
 
         <div class="label">
           Delivery to:
@@ -224,12 +226,14 @@
           </select>
         </div>
         <div class="value">
-          {#if shippingTotal}${shippingTotal}{/if}
+          {#if shippingTotal}
+            {formatPrice(shippingTotal)}
+          {/if}
         </div>
       {/if}
 
       <div class="label total">Total</div>
-      <div class="value total">${total}</div>
+      <div class="value total">{formatPrice(total)}</div>
       {#if isNoteVisible}
         <div class="note"><textarea bind:value={note} placeholder="Add a note"></textarea></div>
       {:else}
