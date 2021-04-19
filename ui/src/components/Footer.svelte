@@ -7,6 +7,7 @@
     text-align: center;
     font-size: 0.9em;
     padding-top: 2em;
+    padding-bottom:2em;
   }
 </style>
 
