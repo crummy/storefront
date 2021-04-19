@@ -78,6 +78,6 @@ const calculateShipping = (shop: Shop, goods: OrderedGood[], selectedOption: str
   }
   const kilosToShip = goods.map(good => good.quantity)
     .reduce((a, b) => a + b, 0);
-  const boxesToShip = Math.round(kilosToShip / shipping.kgPerBox + 0.5);
+  const boxesToShip = Math.round((kilosToShip - 1) / shipping.kgPerBox + 0.5);
   return boxesToShip * shipping.pricePerBox;
 }

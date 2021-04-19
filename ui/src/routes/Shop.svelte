@@ -26,7 +26,7 @@
         .map(good => (good.quantity ? good.quantity : 0))
         .reduce((a, b) => a + b, 0);
       const boxesToShip = Math.round(
-        kilosToShip / selectedShippingOption.kgPerBox + 0.5
+              (kilosToShip - 1) / selectedShippingOption.kgPerBox + 0.5
       );
       shippingTotal = boxesToShip * selectedShippingOption.pricePerBox;
     }
