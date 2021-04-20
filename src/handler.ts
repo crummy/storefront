@@ -37,14 +37,14 @@ export const checkout = async ({ pathParameters, body }: Event): Promise<Respons
     if (order.goods.some((good: OrderedGood) => good.quantity < 0)) {
       throw new HttpError(`Tried to order goods with negative quantity`, 409)
     }
-    const result = await createOrder(shopId, order.goods, order.shipping, order.note)
+    const result = await createOrder(shopId, order.goods, order.shipping, order.note, order.phoneNumber)
     return ok(result)
   } catch (e) {
     return error(e)
   }
 }
 
-export const getOrder = async ({ pathParameters, body }: Event): Promise<Response> => {
+export const getOrder = async ({ pathParameters }: Event): Promise<Response> => {
   try {
     const { shopId, orderId } = pathParameters
     const order = await readOrder(orderId)

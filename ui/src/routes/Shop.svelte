@@ -11,6 +11,7 @@
     shippingTotal = "";
   let isNoteVisible = false;
   let note = "";
+  let phoneNumber = "";
 
   const formatPrice = (price) => '$' + Number(price).toFixed(2);
 
@@ -44,7 +45,8 @@
     const order = {
       goods: shop.goods.filter(good => good.quantity > 0),
       shipping: selectedShippingOption.name,
-      note
+      note,
+      phoneNumber
     };
     const response = await checkout(shopId, order);
     const json = await response.json();
@@ -234,6 +236,12 @@
 
       <div class="label total">Total</div>
       <div class="value total">{formatPrice(total)}</div>
+      <div>
+        Phone number:
+        <input type="text" bind:value={phoneNumber}/>
+      </div>
+      <div></div>
+
       {#if isNoteVisible}
         <div class="note"><textarea bind:value={note} placeholder="Add a note"></textarea></div>
       {:else}

@@ -10,8 +10,8 @@ export const sendOrderNotification = (order: PlacedOrder, shopConfig: ShopConfig
   const link = `${websiteBaseUrl}/${order.shopId}/order/${order.id}`
   const address = addressToString(order.address)
   const goods = goodsToString(order.goods)
-  let htmlBody = `<h1>Storefront.nz Order for ${order.shopId}</h1><h2><a href="${link}">Order ID ${order.id}</a></h2>Deliver <b>${goods}</b> to: <br/><a href="mailto:${order.email}">${order.name}</a><br/>, ${address}<br/>`
-  let textBody = `Storefront.nz Order for ${order.shopId}\r\nOrder ID ${order.id}\r\nDeliver ${goods} to:\r\n${order.name} - ${order.email}\r\n${address}\r\n`
+  let htmlBody = `<h1>Storefront.nz Order for ${order.shopId}</h1><h2><a href="${link}">Order ID ${order.id}</a></h2>Deliver <b>${goods}</b> via ${order.shipping} to: <br/><a href="mailto:${order.email}">${order.name}</a> (${order.phoneNumber})<br/>, ${address}<br/>`
+  let textBody = `Storefront.nz Order for ${order.shopId}\r\nOrder ID ${order.id}\r\nDeliver ${goods} via ${order.shipping} to:\r\n${order.name} - ${order.email} - ${order.phoneNumber}\r\n${address}\r\n`
   if (order.note) {
     htmlBody += `<b>Note:</b> ${order.note}`
     textBody += `Note: ${order.note}`

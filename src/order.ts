@@ -21,7 +21,8 @@ export interface Order {
   created: Date,
   note?: string,
   shipping?: string,
-  shippingCost?: number
+  shippingCost?: number,
+  phoneNumber: string
 }
 
 export interface PlacedOrder extends SavedOrder {
@@ -121,7 +122,8 @@ const toSavedOrder = (item: any): SavedOrder => ({
   state: item.state,
   note: item.note,
   shipping: item.shipping,
-  shippingCost: item.shippingCost
+  shippingCost: item.shippingCost,
+  phoneNumber: item.phoneNumber
 })
 
 const toPlacedOrder = (item: any): PlacedOrder => ({
@@ -135,5 +137,6 @@ const toPlacedOrder = (item: any): PlacedOrder => ({
   address: item.address,
   note: item.note,
   shipping: item.shipping,
-  shippingCost: item.shippingCost
+  shippingCost: item.shippingCost,
+  phoneNumber: item.phoneNumber
 })
