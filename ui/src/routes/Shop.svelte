@@ -179,11 +179,8 @@
   {#if shop.message && !error}
     <div class="message">{shop.message}</div>
   {/if}
-  {#if shop.note1}
-    <h3>{shop.note1}</h3>
-  {/if}
-  {#if shop.note2}
-    <h3>{shop.note2}</h3>
+  {#if shop.note}
+    <h3>{@html shop.note.replaceAll("\n", "<br />")}</h3>
   {/if}
   {#if shop.splashImage}
     <div class="splash-image"><img alt="splash" src={shop.splashImage}/></div>
