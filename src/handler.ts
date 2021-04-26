@@ -85,6 +85,7 @@ export const getOrders = async ({ pathParameters }: Event): Promise<Response> =>
 }
 
 export const stripeWebhook = async ({ body }: Event): Promise<Response> => {
+  console.log("Received webhook event")
   try {
     const { data: { object: { client_reference_id, customer_details: { email }, shipping: { address, name } } } } = JSON.parse(body!)
     const orderId = client_reference_id
@@ -113,7 +114,7 @@ const ok = (message: any = {}): Response => {
 }
 
 const error = (exception: Error): Response => {
-  console.log(exception)
+  console.error("Fatal error", exception)
   if (exception instanceof HttpError) {
     return {
       statusCode: exception.statusCode,
@@ -123,7 +124,7 @@ const error = (exception: Error): Response => {
   } else {
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: "An unexpected error occurred" }),
+      body: JSON.stringify({ error: "An unexpected error occurred", exception }),
       headers: corsHeaders
     }
   }
