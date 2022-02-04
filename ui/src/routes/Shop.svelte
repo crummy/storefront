@@ -12,6 +12,7 @@
   let isNoteVisible = false;
   let note = "";
   let phoneNumber = "";
+  let boxesToShip = 0;
 
   const formatPrice = (price) => '$' + Number(price).toFixed(2);
 
@@ -26,9 +27,7 @@
       const kilosToShip = shop.goods
         .map(good => (good.quantity ? good.quantity : 0))
         .reduce((a, b) => a + b, 0);
-      const boxesToShip = Math.round(
-              (kilosToShip - 1) / selectedShippingOption.kgPerBox + 0.5
-      );
+      boxesToShip = Math.round((kilosToShip - 1) / selectedShippingOption.kgPerBox + 0.5);
       shippingTotal = boxesToShip * selectedShippingOption.pricePerBox;
     }
   }
@@ -83,6 +82,7 @@
     border-bottom: 1px solid lightgray;
     grid-row-gap: 1.5em;
     padding-bottom: 1.5em;
+    margin: 2em;
   }
 
   .title {
@@ -133,6 +133,8 @@
   .quantityInput {
     width: 100%;
     text-align: center;
+    border: 1px solid black;
+    background-color: whitesmoke;
   }
 
   #checkoutButton {
@@ -227,6 +229,9 @@
         <div class="value">
           {#if shippingTotal}
             {formatPrice(shippingTotal)}
+            {#if boxesToShip > 1}
+              &nbsp;({boxesToShip} boxes)
+            {/if}
           {/if}
         </div>
       {/if}
