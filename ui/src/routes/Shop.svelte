@@ -134,7 +134,7 @@
     width: 100%;
     text-align: center;
     border: 1px solid black;
-    background-color: whitesmoke;
+    background-color: lightgray;
   }
 
   #checkoutButton {
@@ -145,7 +145,8 @@
   }
 
   .splash-image {
-    max-width: 800px;
+    display: flex;
+    justify-content: center;
   }
 
   .splash-image img {
