@@ -147,6 +147,7 @@
   .splash-image {
     display: flex;
     justify-content: center;
+    max-width: 800px;
   }
 
   .splash-image img {
