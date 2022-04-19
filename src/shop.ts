@@ -13,7 +13,8 @@ export interface Good {
   name: string,
   price: number,
   unit: string,
-  comment?: string
+  comment?: string,
+  soldOut?: boolean,
 }
 
 export interface ShippingCosts {
@@ -53,16 +54,17 @@ export const get = async (shopId: string): Promise<Shop | null> => {
   }
 }
 
-const toGood = (row: Array<string | Number>): Good => {
+const toGood = (row: Array<string | number | boolean>): Good => {
   return {
     name: String(row[0]),
     price: Number(row[1]),
     unit: String(row[2]),
-    comment: row[3] ? String(row[3]) : undefined
+    comment: row[3] ? String(row[3]) : undefined,
+    soldOut: row[4] ? !!row[4] : false
   }
 }
 
-const toShippingCosts = (row: Array<string | Number>): ShippingCosts => {
+const toShippingCosts = (row: Array<string | number | boolean>): ShippingCosts => {
   return {
     name: String(row[0]),
     pricePerBox: Number(row[1]),

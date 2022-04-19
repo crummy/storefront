@@ -205,13 +205,19 @@
             <div class="comment">{good.comment}</div>
           {/if}
         </div>
-        <div class="quantityContainer">
-          <input
-            type="number"
-            class="quantityInput"
-            bind:value={good.quantity}
-            min="0" />
-        </div>
+        {#if good.soldOut}
+          <div class="quantityContainer">
+            Sold out
+          </div>
+        {:else}
+          <div class="quantityContainer">
+            <input
+              type="number"
+              class="quantityInput"
+              bind:value={good.quantity}
+              min="0" />
+          </div>
+        {/if}
       {/each}
     </div>
     <div class="totalList">

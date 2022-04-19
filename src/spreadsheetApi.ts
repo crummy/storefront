@@ -18,7 +18,7 @@ export interface Spreadsheet {
 interface ValueRange {
   range: string,
   majorDimension: string,
-  values: Array<Array<string | Number>>
+  values: Array<Array<string | number | boolean>>
 }
 
 export const getShopRows = (id: string): Promise<Spreadsheet> => {

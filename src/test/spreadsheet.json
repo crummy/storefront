@@ -9,39 +9,50 @@
           "Item",
           "Price",
           "Unit",
-          "Comment"
+          "Comment",
+          "Sold Out",
         ],
         [
           "Omega plums",
           6,
-          "kg"
+          "kg",
+          "",
+          "FALSE",
         ],
         [
           "Angelino plums",
           6,
-          "kg"
+          "kg",
+          "",
+          "FALSE"
         ],
         [
           "Plum seconds",
           4,
-          "kg"
+          "kg",
+          "",
+          "FALSE"
         ],
         [
           "Feijoas",
           4,
-          "kg"
+          "kg",
+          "",
+          "FALSE"
         ],
         [
           "Feijoa smalls",
           3,
           "kg",
-          "egg sized"
+          "egg sized",
+          "FALSE"
         ],
         [
           "Liberty apples",
           4,
           "kg",
-          "from Heavens' Scent orchard"
+          "from Heavens' Scent orchard",
+          "FALSE"
         ]
       ]
     },
