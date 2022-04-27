@@ -197,7 +197,7 @@
     on:submit|preventDefault={handleCheckout}>
     <div class="itemList">
       <div class="header">Item</div>
-      <div class="header quantity">Quantity</div>
+      <div class="header quantity">Quantity (kg)</div>
       {#each shop.goods as good}
         <div class="item">
           <span class="title">{good.name}</span>, {formatPrice(good.price)}/{good.unit}
