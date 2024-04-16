@@ -207,7 +207,7 @@
             <div class="comment">{good.comment}</div>
           {/if}
           {#if good.discount && good.discountThreshold}
-            <div class="comment">{good.discount * 100}% off with orders over {good.discountThreshold}{good.unit}</div>
+            <div class="comment">{formatPrice((1 - good.discount) * good.price)}{good.unit} for orders over {good.discountThreshold}{good.unit}</div>
           {/if}
         </div>
         {#if good.soldOut}
