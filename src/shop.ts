@@ -15,6 +15,8 @@ export interface Good {
   unit: string,
   comment?: string,
   soldOut?: boolean,
+  discountThreshold?: number,
+  discount?: number
 }
 
 export interface ShippingCosts {
@@ -60,7 +62,9 @@ const toGood = (row: Array<string | number | boolean>): Good => {
     price: Number(row[1]),
     unit: String(row[2]),
     comment: row[3] ? String(row[3]) : undefined,
-    soldOut: row[4] ? !!row[4] : false
+    soldOut: row[4] ? !!row[4] : false,
+    discountThreshold: row[5] ? Number(row[5]) : undefined,
+    discount: row[6] ? Number(row[6]) : undefined
   }
 }
 

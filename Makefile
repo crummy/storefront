@@ -1,6 +1,6 @@
 STACK_NAME := "simple-sell-ui"
-BUCKET = $(shell aws cloudformation --region us-east-1 describe-stacks --stack-name $(STACK_NAME) --query "Stacks[0].Outputs[?OutputKey=='BucketName'].OutputValue" --output text)
-CLOUDFRONT_ID = $(shell aws cloudfront list-distributions --query "DistributionList.Items[0].Id" --output text)
+BUCKET = $(shell aws cloudformation --region us-east-1 --profile storefront describe-stacks --stack-name $(STACK_NAME) --query "Stacks[0].Outputs[?OutputKey=='BucketName'].OutputValue" --output text)
+CLOUDFRONT_ID = $(shell aws --profile storefront cloudfront list-distributions --query "DistributionList.Items[0].Id" --output text)
 
 # Has to be run against us-east-1 because that's where cloudfront lives
 deploy-cloudformation:
@@ -8,8 +8,8 @@ deploy-cloudformation:
 
 sync:
 	cd ui && npm run build && cd - && \
-	aws --region us-east-1 s3 cp --recursive --acl "public-read" ./ui/public s3://$(BUCKET)/ && \
-	aws cloudfront create-invalidation --distribution-id $(CLOUDFRONT_ID) --paths "/*"
+	aws --region us-east-1 --profile storefront s3 cp --recursive --acl "public-read" ./ui/public s3://$(BUCKET)/ && \
+	aws --profile storefront cloudfront create-invalidation --distribution-id $(CLOUDFRONT_ID) --paths "/*"
 
 add-shop:
 	test -n "$(STAGE)"
@@ -34,7 +34,7 @@ set-google-api-key:
 
 deploy:
 	npm run build
-	serverless deploy
+	./node_modules/.bin/serverless deploy --aws-profile storefront
 
 env: # doesn't work
 	export $(cat .env | xargs)

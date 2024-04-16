@@ -1,6 +1,7 @@
 import { ddb } from './dynamodb'
 import { OrderedGood } from './checkout'
 import { v4 as uuidv4 } from 'uuid';
+import {UpdateCommandInput} from "@aws-sdk/lib-dynamodb/dist-types/commands/UpdateCommand";
 
 export const tableName = process.env.ORDER_TABLE!!
 
@@ -47,18 +48,19 @@ export const get = async (id: string): Promise<SavedOrder | PlacedOrder | null> 
       id
     }
   }
-  return ddb.get(params)
-    .promise()
-    .then(result => result.Item)
-    .then(item => {
-      if (item && item.state == State.PAID) {
-        return toPlacedOrder(item)
-      } else if (item) {
-        return toSavedOrder(item)
-      } else {
-        return null
-      }
-    })
+  return (
+    ddb.get(params)
+      .then(result => result.Item)
+      .then(item => {
+        if (item && item.state == State.PAID) {
+          return toPlacedOrder(item)
+        } else if (item) {
+          return toSavedOrder(item)
+        } else {
+          return null
+        }
+      })
+  );
 }
 
 export const put = async (order: Order): Promise<string> => {
@@ -67,7 +69,7 @@ export const put = async (order: Order): Promise<string> => {
     TableName: tableName,
     Item: { id, state: State.PENDING_PAYMENT, ...order, created: order.created.toISOString() }
   }
-  await ddb.put(params).promise()
+  await ddb.put(params)
   return id
 }
 
@@ -83,11 +85,11 @@ export const updateOrderCancelled = async (id: string) => {
       ":state": State.CANCELLED
     }
   }
-  await ddb.update(params).promise()
+  await ddb.update(params)
 }
 
 export const updateOrderPlaced = async (id: string, name: string, address: Address, email: string) => {
-  const params = {
+  const params: UpdateCommandInput = {
     TableName: tableName,
     Key: { id },
     AttributeUpdates: {
@@ -98,7 +100,7 @@ export const updateOrderPlaced = async (id: string, name: string, address: Addre
     },
     ReturnValues: "ALL_NEW"
   }
-  await ddb.update(params).promise()
+  await ddb.update(params)
 }
 
 export const query = async (shopId: string): Promise<SavedOrder[]> => {
@@ -110,8 +112,9 @@ export const query = async (shopId: string): Promise<SavedOrder[]> => {
       ":shopId": shopId
     }
   }
-  return ddb.query(params).promise()
-    .then(result => result.Items?.map(item => toSavedOrder(item)) || [])
+  return (
+    ddb.query(params).then(result => result.Items?.map(item => toSavedOrder(item)) || [])
+  );
 }
 
 const toSavedOrder = (item: any): SavedOrder => ({

@@ -156,7 +156,7 @@ const createShopConfig = async (config: ShopConfig) => {
   await ddb.put({
     TableName: shopConfigTable,
     Item: config
-  }).promise()
+  })
 }
 
 const createOrder = async () => {

@@ -17,7 +17,9 @@
   const formatPrice = (price) => '$' + Number(price).toFixed(2);
 
   $: subtotal = shop.goods
-    .map(good => good.price * (good.quantity ? good.quantity : 0))
+    .map(good => good.discount && good.discountThreshold && good.quantity > good.discountThreshold
+            ? good.price * (good.quantity ? good.quantity : 0) * (1 - good.discount)
+            : good.price * (good.quantity ? good.quantity : 0))
     .reduce((a, b) => a + b, 0);
 
   $: total = subtotal + shippingTotal;
@@ -33,7 +35,7 @@
   }
 
   const handleCheckout = async () => {
-    if (subtotal == 0) {
+    if (subtotal === 0) {
       error = "No items have been selected";
       return;
     } else if (selectedShippingOption === undefined) {
@@ -203,6 +205,9 @@
           <span class="title">{good.name}</span>, {formatPrice(good.price)}/{good.unit}
           {#if good.comment}
             <div class="comment">{good.comment}</div>
+          {/if}
+          {#if good.discount && good.discountThreshold}
+            <div class="comment">{good.discount * 100}% off with orders over {good.discountThreshold}{good.unit}</div>
           {/if}
         </div>
         {#if good.soldOut}

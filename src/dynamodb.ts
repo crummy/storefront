@@ -1,9 +1,16 @@
-import AWS from 'aws-sdk'
+import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
+import { DynamoDB } from '@aws-sdk/client-dynamodb';
 
 const config = process.env.NODE_ENV == 'test'
   ? { endpoint: 'http://localhost:8000' }
   : {}
 
-export const ddb = new AWS.DynamoDB.DocumentClient({ convertEmptyValues: true, ...config})
+export const ddb = DynamoDBDocument.from(new DynamoDB({
+  ...config
+}), {
+  marshallOptions: {
+    convertEmptyValues: true
+  }
+})
 
-export const raw = new AWS.DynamoDB(config)
+export const raw = new DynamoDB(config)

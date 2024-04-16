@@ -12,6 +12,10 @@
     "local": "npm run build && serverless offline start"
   },
   "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.554.0",
+    "@aws-sdk/client-s3": "^3.554.0",
+    "@aws-sdk/client-ses": "^3.554.0",
+    "@aws-sdk/lib-dynamodb": "^3.554.0",
     "google-spreadsheet": "^3.0.11",
     "node-fetch": "^2.6.1",
     "stripe": "^8.39.2",
@@ -24,12 +28,11 @@
     "@types/node-fetch": "^2.5.5",
     "@types/uuid": "^7.0.2",
     "@types/yaml": "^1.2.0",
-    "aws-sdk": "^2.656.0",
     "jest": "^25.3.0",
-    "serverless": "^2.34.0",
-    "serverless-domain-manager": "^3.3.1",
-    "serverless-offline": "^6.1.4",
-    "serverless-prune-plugin": "^1.4.2",
+    "serverless": "^3.38.0",
+    "serverless-domain-manager": "^7.3.8",
+    "serverless-offline": "^13.3.3",
+    "serverless-prune-plugin": "^2.0.2",
     "ts-jest": "^25.3.1",
     "typescript": "^3.8.3",
     "yaml": "^1.8.3"

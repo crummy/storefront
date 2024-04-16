@@ -85,7 +85,7 @@ export const getOrders = async ({ pathParameters }: Event): Promise<Response> =>
 }
 
 export const stripeWebhook = async ({ body }: Event): Promise<Response> => {
-  console.log("Received webhook event")
+  console.log("Received webhook event", body)
   try {
     const { data: { object: { client_reference_id, customer_details: { email }, shipping: { address, name } } } } = JSON.parse(body!)
     const orderId = client_reference_id

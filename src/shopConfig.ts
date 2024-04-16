@@ -17,14 +17,15 @@ export const get = async (id: string): Promise<ShopConfig | null> => {
       id
     }
   }
-  return ddb.get(params)
-    .promise()
-    .then(result => result.Item)
-    .then(item => {
-      if (item) {
-        return item as ShopConfig
-      } else {
-        return null
-      }
-    })
+  return (
+    ddb.get(params)
+      .then(result => result.Item)
+      .then(item => {
+        if (item) {
+          return item as ShopConfig
+        } else {
+          return null
+        }
+      })
+  );
 }
