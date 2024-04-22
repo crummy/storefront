@@ -30,12 +30,12 @@ export const createOrder = async (shopId: string, goods: OrderedGood[], shipping
 
     const lineItems = goods.map(good => (good.discountThreshold && good.discount && good.quantity > good.discountThreshold ? {
         name: `${good.name} (bulk discount)`,
-        amount: good.price * 100 * (1 - good.discount),
+        amount: Math.round(good.price * 100 * (1 - good.discount)),
         currency: 'nzd',
         quantity: good.quantity
     } : {
         name: good.name,
-        amount: good.price * 100,
+        amount: Math.round(good.price * 100),
         currency: 'nzd',
         quantity: good.quantity
     }))
