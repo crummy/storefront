@@ -72,6 +72,8 @@ const verifyPrices = (shop: Shop, goods: OrderedGood[]) => {
             && g.price == good.price
             && g.discount == good.discount
             && g.discountThreshold == good.discountThreshold
+            && g.soldOut == good.soldOut
+            && !g.soldOut
         )
     )
     if (!goodsMatch) {
