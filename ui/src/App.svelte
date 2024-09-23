@@ -2,7 +2,6 @@
     import router from "page";
     import Shop from "./routes/Shop.svelte";
     import Order from "./routes/Order.svelte";
-    import Welcome from "./routes/Welcome.svelte";
     import Cancel from "./routes/Cancel.svelte";
     import {getShop, getOrder} from "./api";
     import {parseQuery} from "./queryString"
@@ -11,7 +10,7 @@
     let params = {}
 
     const loadShop = (ctx, next) => {
-        params.shopId = ctx.params.shopId
+        params.shopId = ctx.params.shopId || "windsong"
         getShop(params.shopId).then(result => {
             params.shop = {goods: result.goods, shippingCosts: result.shippingCosts, id: result.id, ...result.fields}
             document.title = result.fields.title
@@ -33,7 +32,7 @@
         next()
     }
 
-    router("/", () => (page = Welcome));
+    router("/", loadShop, () => (page = Shop));
     router("/:shopId/*", loadShop);
     router("/:shopId", loadShop, () => (page = Shop));
     router("/:shopId/order/:orderId", loadOrder, loadQueryString, () => (page = Order));
@@ -58,7 +57,7 @@
 </style>
 
 <svelte:head>
-    <title>storefront.nz</title>
+    <title>windsongorchard.nz</title>
 </svelte:head>
 <svelte:component this={page} {params}/>
 

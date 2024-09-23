@@ -39,7 +39,7 @@ Resources:
       DomainName: !Ref DomainName
       SubjectAlternativeNames:
       - !Sub 'www.${DomainName}'
-      ValidationMethod: EMAIL
+      ValidationMethod: DNS
 
   CloudFrontDistribution:
     Type: AWS::CloudFront::Distribution

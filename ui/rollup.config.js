@@ -6,7 +6,7 @@ import { terser } from 'rollup-plugin-terser';
 import replace from '@rollup/plugin-replace';
 
 const production = !process.env.ROLLUP_WATCH;
-const apiUrl = "https://dev.storefront.nz" // TODO: different one for prod
+const apiUrl = "https://dev.windsongorchard.nz" // TODO: different one for prod
 
 export default {
 	input: 'src/main.js',

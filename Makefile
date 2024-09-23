@@ -4,7 +4,7 @@ CLOUDFRONT_ID = $(shell aws --profile storefront cloudfront list-distributions -
 
 # Has to be run against us-east-1 because that's where cloudfront lives
 deploy-cloudformation:
-	aws --region us-east-1 cloudformation deploy --template-file cloudformation/s3-website.yml --stack-name $(STACK_NAME) --parameter-overrides DomainName="storefront.nz"
+	aws --region us-east-1 --profile storefront cloudformation deploy --template-file cloudformation/s3-website.yml --stack-name $(STACK_NAME) --parameter-overrides DomainName="windsongorchard.nz"
 
 sync:
 	cd ui && npm run build && cd - && \
@@ -24,7 +24,7 @@ add-shop:
   	-d limit=1 -G \
 		| jq ".data[0]" --exit-status || curl https://api.stripe.com/v1/webhook_endpoints \
 			-u $(STRIPE_SECRET_KEY): \
-			-d url="https://$(STAGE).storefront.nz/shop/$(ID)/order/webhook" \
+			-d url="https://$(STAGE).windsongorchard.nz/shop/$(ID)/order/webhook" \
 			-d "enabled_events[]"="checkout.session.completed"
 
 set-google-api-key:
@@ -34,7 +34,7 @@ set-google-api-key:
 
 deploy:
 	npm run build
-	./node_modules/.bin/serverless deploy --aws-profile storefront
+	./node_modules/.bin/serverless deploy --aws-profile storefront --verbose
 
 env: # doesn't work
 	export $(cat .env | xargs)

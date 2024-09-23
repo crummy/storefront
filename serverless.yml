@@ -36,7 +36,7 @@ provider:
     GOOGLE_API_KEY: ${ssm:/api/${self:provider.stage}/google-api-key} # TODO: remove this, just use service account
     GOOGLE_SERVICE_ACCOUNT_EMAIL: ${ssm:/api/${self:provider.stage}/google-service-account-email}
     GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY: ${ssm:/api/${self:provider.stage}/google-service-account-private-key}
-    WEBSITE_BASE_URL: https://storefront.nz # TODO: figure out how to get this from CF output
+    WEBSITE_BASE_URL: https://windsongorchard.nz # TODO: figure out how to get this from CF output
     ORDER_CREATED_SES_TEMPLATE: orderCreated_${self:provider.stage}
 
 package:
@@ -151,8 +151,8 @@ custom:
     number: 3
     includeLayers: true
   customDomain:
-    domainName: ${self:provider.stage}.storefront.nz
-    certificateName: "*.storefront.nz"
+    domainName: ${self:provider.stage}.windsongorchard.nz
+    certificateName: "*.windsongorchard.nz"
     createRoute53Record: true
     stage: ${self:provider.stage}
-    endpointType: 'regional'
+    autoDomain: true
